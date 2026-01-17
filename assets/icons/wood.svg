@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Log body -->
+  <ellipse cx="32" cy="32" rx="28" ry="20" fill="#8B5A2B"/>
+  <!-- Wood grain rings -->
+  <ellipse cx="32" cy="32" rx="20" ry="14" fill="none" stroke="#6B4423" stroke-width="2"/>
+  <ellipse cx="32" cy="32" rx="12" ry="8" fill="none" stroke="#6B4423" stroke-width="2"/>
+  <ellipse cx="32" cy="32" rx="5" ry="3" fill="#6B4423"/>
+  <!-- Highlight -->
+  <ellipse cx="26" cy="26" rx="6" ry="4" fill="#A67C52" opacity="0.5"/>
+  <!-- Bark edge -->
+  <ellipse cx="32" cy="32" rx="28" ry="20" fill="none" stroke="#5D4037" stroke-width="3"/>
+</svg>

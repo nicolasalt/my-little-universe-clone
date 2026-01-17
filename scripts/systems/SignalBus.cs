@@ -37,6 +37,16 @@ public partial class SignalBus : Node
     [Signal]
     public delegate void GatheringStoppedEventHandler();
 
+    // Hex territory signals
+    [Signal]
+    public delegate void HexUnlockStartedEventHandler(Vector2I coords);
+
+    [Signal]
+    public delegate void HexUnlockProgressEventHandler(Vector2I coords, float progress);
+
+    [Signal]
+    public delegate void HexUnlockedEventHandler(Vector2I coords);
+
     public override void _Ready()
     {
         Instance = this;

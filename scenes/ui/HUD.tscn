@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://hud001"]
+[gd_scene load_steps=3 format=3 uid="uid://hud001"]
 
 [ext_resource type="Script" path="res://scripts/ui/HUD.cs" id="1_hud"]
+[ext_resource type="Script" path="res://scripts/ui/ResourceDisplay.cs" id="2_resourcedisplay"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_hud")
@@ -48,6 +49,17 @@ layout_mode = 2
 max_value = 50.0
 value = 50.0
 show_percentage = false
+
+[node name="ResourceDisplay" type="HBoxContainer" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -120.0
+offset_top = 15.0
+offset_right = 120.0
+offset_bottom = 60.0
+grow_horizontal = 2
+script = ExtResource("2_resourcedisplay")
 
 [node name="InteractionPrompt" type="Label" parent="."]
 anchors_preset = 7

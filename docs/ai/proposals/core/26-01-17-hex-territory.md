@@ -1,6 +1,6 @@
 ---
 title: Hex Territory System
-status: review
+status: in-progress
 modifies: systems/territory/hex-grid.md
 priority: P0
 author: AI
@@ -121,14 +121,14 @@ int scaledCost = baseCost * (1 + distanceFromStart / 5);
 
 ## Implementation Checklist
 
-- [ ] Create HexTile resource class
-- [ ] Implement HexGridManager with coordinate math
-- [ ] Create hex mesh for ground tiles
-- [ ] Implement fog of war visual
-- [ ] Create unlock cost UI overlay
-- [ ] Implement payment system
+- [x] Create HexTile resource class
+- [x] Implement HexGridManager with coordinate math
+- [x] Create hex mesh for ground tiles
+- [x] Implement fog of war visual (color-based MVP)
+- [x] Create unlock cost UI overlay
+- [x] Implement payment system
 - [ ] Add unlock animation
 - [ ] Implement content spawning on unlock
 - [ ] Create hex editor tool for level design
-- [ ] Add adjacency check for unlocking
+- [x] Add adjacency check for unlocking
 - [ ] Save/load hex state

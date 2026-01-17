@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dcko06cxtyq1m"]
+
+[ext_resource type="Script" path="res://scripts/hex/HexUnlockUI.cs" id="1_ui"]
+
+[node name="HexUnlockUI" type="Node3D"]
+script = ExtResource("1_ui")
