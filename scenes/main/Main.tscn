@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://rock001" path="res://scenes/resources/Rock.tscn" id="4_rock"]
 [ext_resource type="Script" path="res://scripts/hex/HexGridManager.cs" id="5_hexgrid"]
 [ext_resource type="PackedScene" uid="uid://hexunlockui001" path="res://scenes/hex/HexUnlockUI.tscn" id="6_hexui"]
+[ext_resource type="Script" path="res://scripts/resources/ResourceSpawnManager.cs" id="7_resmgr"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 sky_top_color = Color(0.4, 0.6, 0.9, 1)
@@ -41,25 +42,12 @@ script = ExtResource("5_hexgrid")
 
 [node name="HexUnlockUI" parent="." instance=ExtResource("6_hexui")]
 
+[node name="ResourceSpawnManager" type="Node" parent="."]
+script = ExtResource("7_resmgr")
+TreeScene = ExtResource("3_tree")
+RockScene = ExtResource("4_rock")
+
 [node name="Player" parent="." instance=ExtResource("1_player")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="HUD" parent="." instance=ExtResource("2_hud")]
-
-[node name="Tree1" parent="." instance=ExtResource("3_tree")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -3)
-
-[node name="Tree2" parent="." instance=ExtResource("3_tree")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -5)
-
-[node name="Tree3" parent="." instance=ExtResource("3_tree")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 2)
-
-[node name="Rock1" parent="." instance=ExtResource("4_rock")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 2)
-
-[node name="Rock2" parent="." instance=ExtResource("4_rock")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 4)
-
-[node name="Rock3" parent="." instance=ExtResource("4_rock")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -2)

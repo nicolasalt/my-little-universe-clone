@@ -68,5 +68,29 @@ class HexTile
 ## Adjacency
 Hexes use offset coordinates. A hex has 6 neighbors.
 
+## Resource Spawning
+
+`ResourceSpawnManager` handles spawning resources when hexes unlock:
+
+- Listens to `SignalBus.HexUnlocked` signal
+- Spawns predefined resources at hex center + local offsets
+- Origin hex resources spawn on game start
+- Tracks spawned nodes per hex for save/load
+
+### Spawn Configuration
+
+Currently defined in code (`ResourceSpawnManager.InitializeSpawnDefinitions()`).
+Future: move to data files in `data/hex_spawns/`.
+
+```csharp
+// Example spawn definition
+_spawnDefinitions[new Vector2I(0, 0)] = new HexResourceDefinition(new[]
+{
+    new ResourceSpawnPoint(TreeScene, new Vector2(3, -3)),
+    new ResourceSpawnPoint(RockScene, new Vector2(-3, 2))
+});
+```
+
 ## Changelog
+- 26-01-18: Added ResourceSpawnManager for hex content spawning
 - 26-01-17: Initial design for My Little Universe clone

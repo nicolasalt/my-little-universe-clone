@@ -6,7 +6,7 @@ My Little Universe Clone - Development Roadmap
 
 ### Phase 1: Core Loop (P0)
 1. [Resource Gathering](proposals/core/26-01-17-resource-gathering.md) - Auto-gather from nodes (complete)
-2. [Hex Territory](proposals/core/26-01-17-hex-territory.md) - World grid and unlocking (6/11 tasks done)
+2. [Hex Territory](proposals/core/26-01-17-hex-territory.md) - World grid and unlocking (7/10 tasks done)
 
 ## Up Next
 

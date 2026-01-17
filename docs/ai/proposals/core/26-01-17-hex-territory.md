@@ -128,7 +128,7 @@ int scaledCost = baseCost * (1 + distanceFromStart / 5);
 - [x] Create unlock cost UI overlay
 - [x] Implement payment system
 - [ ] Add unlock animation
-- [ ] Implement content spawning on unlock
+- [x] Implement content spawning on unlock
 - [ ] Create hex editor tool for level design
 - [x] Add adjacency check for unlocking
 - [ ] Save/load hex state
