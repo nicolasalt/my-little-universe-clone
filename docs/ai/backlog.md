@@ -3,12 +3,13 @@
 My Little Universe Clone - Development Roadmap
 
 ## In Progress
-(none)
+
+### Phase 1: Core Loop (P0)
+1. [Resource Gathering](proposals/core/26-01-17-resource-gathering.md) - Auto-gather from nodes (6/11 tasks done)
 
 ## Up Next
 
 ### Phase 1: Core Loop (P0)
-1. [Resource Gathering](proposals/core/26-01-17-resource-gathering.md) - Auto-gather from nodes
 2. [Hex Territory](proposals/core/26-01-17-hex-territory.md) - World grid and unlocking
 3. [Backpack](proposals/core/26-01-17-backpack.md) - Unlimited resource inventory
 4. [Basic Combat](proposals/core/26-01-17-basic-combat.md) - Attack, abilities, health

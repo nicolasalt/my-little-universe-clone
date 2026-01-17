@@ -2,32 +2,39 @@
 
 Unlimited inventory for collected resources.
 
+## Implementation Status: ✅ Implemented
+
 ## Design
 
 The backpack holds all gathered resources with no capacity limit. This is a core MLU mechanic that keeps gameplay flowing without inventory management interruptions.
 
-## Data Structure
+## Implementation
+
+**File:** `scripts/resources/Backpack.cs`
+**Location:** Child node of Player
 
 ```csharp
-class Backpack
+public partial class Backpack : Node
 {
-    Dictionary<ResourceType, int> Resources;
+    Dictionary<ResourceType, int> _resources;
 
     void Add(ResourceType type, int amount);
-    bool TrySpend(Dictionary<ResourceType, int> cost);
     int GetCount(ResourceType type);
+    bool Has(ResourceType type, int amount);
     bool HasResources(Dictionary<ResourceType, int> required);
+    bool TrySpend(Dictionary<ResourceType, int> cost);
+    bool TrySpend(ResourceType type, int amount);
 }
 ```
 
-## Persistence
-- Saved per-world (resources can't transfer between worlds)
-- Auto-saved on resource changes
+## Signals
+- Emits `ResourceChanged(int resourceType, int newTotal)` via SignalBus on any change
 
-## UI Integration
-- HUD shows relevant resources for current area
-- Full inventory viewable via I key
-- Resources grayed out if not available in current world
+## Not Yet Implemented
+- Persistence (save/load)
+- Per-world isolation
+- UI integration (inventory screen)
 
 ## Changelog
 - 26-01-17: Initial design for My Little Universe clone
+- 26-01-17: Implemented Backpack node with add/spend/query methods

@@ -80,5 +80,24 @@ class ResourceType : Resource
 }
 ```
 
+## Implementation Status: ✅ Basic types implemented
+
+**File:** `scripts/resources/ResourceType.cs`
+
+Currently implemented as simple enum with helper class:
+```csharp
+public enum ResourceType { Wood, Stone, IronOre, Coins, Gems, Planks, Steel }
+public enum ToolType { None, Axe, Pickaxe, Sword }
+
+public static class ResourceInfo
+{
+    ToolType GetRequiredTool(ResourceType type);
+    string GetDisplayName(ResourceType type);
+}
+```
+
+Additional resource types will be added as worlds are implemented.
+
 ## Changelog
 - 26-01-17: Initial design for My Little Universe clone
+- 26-01-17: Implemented basic ResourceType enum with 7 types and helper class

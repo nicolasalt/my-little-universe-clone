@@ -1,6 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://player001"]
+[gd_scene load_steps=17 format=3 uid="uid://player001"]
 
 [ext_resource type="Script" path="res://scripts/player/Player.cs" id="1_player"]
+[ext_resource type="Script" path="res://scripts/resources/Backpack.cs" id="2_backpack"]
+[ext_resource type="Script" path="res://scripts/player/GatherArea.cs" id="3_gatherarea"]
+[ext_resource type="Script" path="res://scripts/player/GatherController.cs" id="4_gathercontroller"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
 radius = 0.35
@@ -106,3 +109,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 3)
 current = true
 fov = 70.0
+
+[node name="Backpack" type="Node" parent="."]
+script = ExtResource("2_backpack")
+
+[node name="GatherArea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("3_gatherarea")
+
+[node name="GatherController" type="Node" parent="."]
+script = ExtResource("4_gathercontroller")

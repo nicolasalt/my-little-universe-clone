@@ -1,6 +1,6 @@
 ---
 title: Resource Gathering System
-status: review
+status: in-progress
 modifies: systems/resources/gathering.md, systems/player/controller.md
 priority: P0
 author: AI
@@ -102,14 +102,14 @@ float effectiveRate = BaseGatherRate
 
 ## Implementation Checklist
 
-- [ ] Create ResourceNode scene and script
-- [ ] Create ResourceType enum and resource definitions
-- [ ] Add GatherArea to Player scene
-- [ ] Implement GatherController
+- [x] Create ResourceNode scene and script
+- [x] Create ResourceType enum and resource definitions
+- [x] Add GatherArea to Player scene
+- [x] Implement GatherController
 - [ ] Add gather animation to player
 - [ ] Implement tool selection (auto mode)
 - [ ] Add particle effects for gathering
-- [ ] Implement resource respawning
-- [ ] Connect to backpack system
+- [x] Implement resource respawning
+- [x] Connect to backpack system
 - [ ] Add gather rate modifiers
-- [ ] Create first set of resource nodes (tree, rock, ore)
+- [x] Create first set of resource nodes (tree, rock)
