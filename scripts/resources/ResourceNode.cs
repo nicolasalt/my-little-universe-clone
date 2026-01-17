@@ -49,6 +49,12 @@ public partial class ResourceNode : StaticBody3D
             _visual.Scale = _originalScale * scale;
         }
 
+        // Spawn hit particles
+        SpawnHitParticles();
+
+        // Shake effect on hit
+        PlayHitShake();
+
         // Check if depleted
         if (_remainingHits <= 0)
         {
@@ -56,6 +62,32 @@ public partial class ResourceNode : StaticBody3D
         }
 
         return yield;
+    }
+
+    /// <summary>
+    /// Spawn particle effects when hit.
+    /// </summary>
+    private void SpawnHitParticles()
+    {
+        // Get spawn position (center of visual or node position)
+        Vector3 spawnPos = _visual != null ? _visual.GlobalPosition : GlobalPosition;
+        spawnPos.Y += 0.5f; // Offset upward slightly
+
+        GatherParticles.SpawnAt(GetTree().Root, spawnPos, Type);
+    }
+
+    /// <summary>
+    /// Quick shake effect when hit.
+    /// </summary>
+    private void PlayHitShake()
+    {
+        if (_visual == null) return;
+
+        var originalPos = _visual.Position;
+        var tween = CreateTween();
+        tween.TweenProperty(_visual, "position", originalPos + new Vector3(0.05f, 0, 0), 0.03f);
+        tween.TweenProperty(_visual, "position", originalPos + new Vector3(-0.05f, 0, 0), 0.03f);
+        tween.TweenProperty(_visual, "position", originalPos, 0.03f);
     }
 
     /// <summary>

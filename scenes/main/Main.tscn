@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://main001"]
+[gd_scene load_steps=11 format=3 uid="uid://main001"]
 
 [ext_resource type="PackedScene" uid="uid://player001" path="res://scenes/characters/Player.tscn" id="1_player"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://scenes/ui/HUD.tscn" id="2_hud"]
@@ -28,20 +28,11 @@ glow_intensity = 0.3
 [sub_resource type="PlaneMesh" id="PlaneMesh_1"]
 size = Vector2(50, 50)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_1"]
-size = Vector3(50, 0.1, 50)
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ground"]
 albedo_color = Color(0.25, 0.4, 0.2, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_1"]
-size = Vector3(1, 1, 1)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_2"]
-size = Vector3(1, 1, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cube"]
-albedo_color = Color(0.6, 0.3, 0.2, 1)
+[sub_resource type="BoxShape3D" id="BoxShape3D_1"]
+size = Vector3(50, 0.1, 50)
 
 [node name="Main" type="Node3D"]
 
@@ -55,6 +46,7 @@ shadow_enabled = true
 [node name="Ground" type="StaticBody3D" parent="."]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0019886494, -0.007593751, 0.0036411285)
 mesh = SubResource("PlaneMesh_1")
 surface_material_override/0 = SubResource("StandardMaterial3D_ground")
 
@@ -66,16 +58,6 @@ shape = SubResource("BoxShape3D_1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="HUD" parent="." instance=ExtResource("2_hud")]
-
-[node name="TestCube" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.5, -5)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="TestCube"]
-mesh = SubResource("BoxMesh_1")
-surface_material_override/0 = SubResource("StandardMaterial3D_cube")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="TestCube"]
-shape = SubResource("BoxShape3D_2")
 
 [node name="Tree1" parent="." instance=ExtResource("3_tree")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -3)

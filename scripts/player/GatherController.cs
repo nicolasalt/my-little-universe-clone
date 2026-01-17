@@ -104,7 +104,8 @@ public partial class GatherController : Node
                 yield
             );
 
-            // TODO: Trigger gather animation and particles
+            // Spawn resource popup text
+            SpawnResourcePopup(_currentTarget, yield);
         }
 
         // Check if depleted
@@ -138,5 +139,20 @@ public partial class GatherController : Node
     public void StopGathering()
     {
         SetTarget(null);
+    }
+
+    /// <summary>
+    /// Spawn a floating text popup showing resource gain.
+    /// </summary>
+    private void SpawnResourcePopup(ResourceNode node, int amount)
+    {
+        // Position popup above the resource node
+        Vector3 popupPos = node.GlobalPosition + new Vector3(0, 1.5f, 0);
+
+        // Add slight random offset to prevent stacking
+        popupPos.X += (float)GD.RandRange(-0.2, 0.2);
+        popupPos.Z += (float)GD.RandRange(-0.2, 0.2);
+
+        ResourcePopup.SpawnAt(node.GetTree().Root, popupPos, node.Type, amount);
     }
 }

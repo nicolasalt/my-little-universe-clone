@@ -77,13 +77,37 @@ public partial class ResourceNode : StaticBody3D
 - `scenes/resources/Rock.tscn` - Stone resource (3 hits, 1 yield)
 - Main scene has 3 trees and 3 rocks for testing
 
+## Visual Feedback
+
+### Gather Animation (Player)
+- Procedural animation in `Player.cs` when `IsGathering` is true
+- Arms swing in rhythmic chopping motion
+- Body bobs and leans forward slightly
+- Legs take a slight stance
+- Triggered automatically when near resource and not moving
+
+### Hit Particles (`scripts/vfx/GatherParticles.cs`)
+- GPUParticles3D spawned on each gather hit
+- Color matches resource type (brown for wood, gray for stone)
+- Small box particles burst upward and fall with gravity
+- Self-destructs after emission completes
+
+### Resource Popup (`scripts/vfx/ResourcePopup.cs`)
+- Label3D showing "+X ResourceName" (e.g., "+2 Wood")
+- Spawns above resource node on gather
+- Floats upward and fades out over 1.2 seconds
+- Color-coded by resource type
+- Billboard mode, always faces camera
+
+### Hit Shake (ResourceNode)
+- Quick horizontal shake when resource is hit
+- Tween-based, subtle visual feedback
+
 ## Not Yet Implemented
-- Gather animation on player
 - Tool selection logic (currently gathers regardless of tool)
-- Particle effects on hit
-- Resource popup text (+3 Wood)
 - Charged/AoE gathering
 
 ## Changelog
 - 26-01-17: Initial design for My Little Universe clone
 - 26-01-17: Implemented core gathering system (GatherArea, GatherController, ResourceNode, Backpack)
+- 26-01-17: Added visual feedback: gather animation, hit particles, resource popup text, hit shake

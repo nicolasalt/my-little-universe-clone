@@ -27,6 +27,10 @@ public partial class Player : CharacterBody3D
     private float _bobAmount = 0f;
     private bool _wasOnFloor = true;
 
+    // Gather animation state
+    private GatherController _gatherController;
+    private float _gatherAnimTime = 0f;
+
     public float Gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
 
     public override void _Ready()
@@ -53,6 +57,9 @@ public partial class Player : CharacterBody3D
             Stats = new PlayerStats();
         }
         Stats.Initialize();
+
+        // Get gather controller reference
+        _gatherController = GetNodeOrNull<GatherController>("GatherController");
 
         GameManager.Instance.CurrentPlayer = this;
         SignalBus.Instance?.EmitSignal(SignalBus.SignalName.PlayerSpawned, this);
@@ -132,7 +139,8 @@ public partial class Player : CharacterBody3D
         MoveAndSlide();
 
         // Animate character
-        AnimateCharacter((float)delta, direction != Vector3.Zero);
+        bool isGathering = _gatherController != null && _gatherController.IsGathering;
+        AnimateCharacter((float)delta, direction != Vector3.Zero, isGathering);
 
         // Land squash effect
         if (IsOnFloor() && !_wasOnFloor)
@@ -142,9 +150,16 @@ public partial class Player : CharacterBody3D
         _wasOnFloor = IsOnFloor();
     }
 
-    private void AnimateCharacter(float delta, bool isMoving)
+    private void AnimateCharacter(float delta, bool isMoving, bool isGathering = false)
     {
         if (_characterModel == null) return;
+
+        // Gathering animation takes priority when not moving
+        if (isGathering && !isMoving)
+        {
+            AnimateGathering(delta);
+            return;
+        }
 
         float speed = _isSprinting ? 14f : 10f;
         float limbSwing = _isSprinting ? 0.5f : 0.35f;
@@ -153,6 +168,7 @@ public partial class Player : CharacterBody3D
         if (isMoving)
         {
             _animTime += delta * speed;
+            _gatherAnimTime = 0f; // Reset gather animation when moving
 
             // Arm swing (opposite to legs)
             if (_armLeft != null)
@@ -177,6 +193,7 @@ public partial class Player : CharacterBody3D
         {
             // Idle breathing animation
             _animTime += delta * 2f;
+            _gatherAnimTime = 0f; // Reset gather animation when idle
 
             float idleBob = Mathf.Sin(_animTime) * 0.02f;
             if (_body != null)
@@ -194,6 +211,42 @@ public partial class Player : CharacterBody3D
             if (_legRight != null)
                 _legRight.Rotation = _legRight.Rotation.Lerp(Vector3.Zero, delta * 8f);
         }
+    }
+
+    private void AnimateGathering(float delta)
+    {
+        // Rhythmic chopping/swinging motion
+        float gatherSpeed = 8f; // Speed of the gather animation
+        _gatherAnimTime += delta * gatherSpeed;
+
+        // Arms swing down together in a chopping motion
+        float armSwing = Mathf.Sin(_gatherAnimTime) * 0.6f;
+        // Add a slight forward lean
+        float forwardLean = Mathf.Abs(Mathf.Sin(_gatherAnimTime)) * 0.15f;
+
+        if (_armLeft != null)
+            _armLeft.Rotation = new Vector3(-armSwing - 0.3f, 0, 0);
+        if (_armRight != null)
+            _armRight.Rotation = new Vector3(-armSwing - 0.3f, 0, 0);
+
+        // Slight body bob with gather rhythm
+        float gatherBob = Mathf.Abs(Mathf.Sin(_gatherAnimTime)) * 0.04f;
+        if (_body != null)
+        {
+            _body.Position = new Vector3(0, 0.85f + gatherBob, 0);
+            _body.Rotation = new Vector3(forwardLean, 0, 0);
+        }
+        if (_head != null)
+        {
+            _head.Position = new Vector3(0, 1.42f + gatherBob, 0);
+            _head.Rotation = new Vector3(forwardLean * 0.5f, 0, 0);
+        }
+
+        // Legs stay relatively still, maybe a slight stance
+        if (_legLeft != null)
+            _legLeft.Rotation = _legLeft.Rotation.Lerp(new Vector3(-0.1f, 0, 0), delta * 5f);
+        if (_legRight != null)
+            _legRight.Rotation = _legRight.Rotation.Lerp(new Vector3(0.1f, 0, 0), delta * 5f);
     }
 
     private void SquashOnLand()
