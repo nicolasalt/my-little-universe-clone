@@ -13,12 +13,38 @@ public partial class Player : CharacterBody3D
     private float _cameraArmRotationX = 0f;
     private bool _isSprinting = false;
 
+    // Animation references
+    private Node3D _characterModel;
+    private Node3D _head;
+    private Node3D _body;
+    private Node3D _armLeft;
+    private Node3D _armRight;
+    private Node3D _legLeft;
+    private Node3D _legRight;
+
+    // Animation state
+    private float _animTime = 0f;
+    private float _bobAmount = 0f;
+    private bool _wasOnFloor = true;
+
     public float Gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
 
     public override void _Ready()
     {
         _cameraArm = GetNode<Node3D>("CameraArm");
         _camera = GetNode<Camera3D>("CameraArm/Camera3D");
+
+        // Get animation references
+        _characterModel = GetNodeOrNull<Node3D>("CharacterModel");
+        if (_characterModel != null)
+        {
+            _head = _characterModel.GetNodeOrNull<Node3D>("Head");
+            _body = _characterModel.GetNodeOrNull<Node3D>("Body");
+            _armLeft = _characterModel.GetNodeOrNull<Node3D>("ArmLeft");
+            _armRight = _characterModel.GetNodeOrNull<Node3D>("ArmRight");
+            _legLeft = _characterModel.GetNodeOrNull<Node3D>("LegLeft");
+            _legRight = _characterModel.GetNodeOrNull<Node3D>("LegRight");
+        }
 
         Input.MouseMode = Input.MouseModeEnum.Captured;
 
@@ -104,5 +130,80 @@ public partial class Player : CharacterBody3D
 
         Velocity = velocity;
         MoveAndSlide();
+
+        // Animate character
+        AnimateCharacter((float)delta, direction != Vector3.Zero);
+
+        // Land squash effect
+        if (IsOnFloor() && !_wasOnFloor)
+        {
+            SquashOnLand();
+        }
+        _wasOnFloor = IsOnFloor();
+    }
+
+    private void AnimateCharacter(float delta, bool isMoving)
+    {
+        if (_characterModel == null) return;
+
+        float speed = _isSprinting ? 14f : 10f;
+        float limbSwing = _isSprinting ? 0.5f : 0.35f;
+        float bodyBob = _isSprinting ? 0.08f : 0.05f;
+
+        if (isMoving)
+        {
+            _animTime += delta * speed;
+
+            // Arm swing (opposite to legs)
+            if (_armLeft != null)
+                _armLeft.Rotation = new Vector3(Mathf.Sin(_animTime) * limbSwing, 0, 0);
+            if (_armRight != null)
+                _armRight.Rotation = new Vector3(-Mathf.Sin(_animTime) * limbSwing, 0, 0);
+
+            // Leg swing
+            if (_legLeft != null)
+                _legLeft.Rotation = new Vector3(-Mathf.Sin(_animTime) * limbSwing, 0, 0);
+            if (_legRight != null)
+                _legRight.Rotation = new Vector3(Mathf.Sin(_animTime) * limbSwing, 0, 0);
+
+            // Body bob
+            _bobAmount = Mathf.Abs(Mathf.Sin(_animTime * 2)) * bodyBob;
+            if (_body != null)
+                _body.Position = new Vector3(0, 0.85f + _bobAmount, 0);
+            if (_head != null)
+                _head.Position = new Vector3(0, 1.42f + _bobAmount, 0);
+        }
+        else
+        {
+            // Idle breathing animation
+            _animTime += delta * 2f;
+
+            float idleBob = Mathf.Sin(_animTime) * 0.02f;
+            if (_body != null)
+                _body.Position = new Vector3(0, 0.85f + idleBob, 0);
+            if (_head != null)
+                _head.Position = new Vector3(0, 1.42f + idleBob, 0);
+
+            // Reset limbs smoothly
+            if (_armLeft != null)
+                _armLeft.Rotation = _armLeft.Rotation.Lerp(Vector3.Zero, delta * 8f);
+            if (_armRight != null)
+                _armRight.Rotation = _armRight.Rotation.Lerp(Vector3.Zero, delta * 8f);
+            if (_legLeft != null)
+                _legLeft.Rotation = _legLeft.Rotation.Lerp(Vector3.Zero, delta * 8f);
+            if (_legRight != null)
+                _legRight.Rotation = _legRight.Rotation.Lerp(Vector3.Zero, delta * 8f);
+        }
+    }
+
+    private void SquashOnLand()
+    {
+        if (_characterModel == null) return;
+
+        // Quick squash and stretch effect using a tween
+        var tween = CreateTween();
+        tween.TweenProperty(_characterModel, "scale", new Vector3(1.2f, 0.8f, 1.2f), 0.05f);
+        tween.TweenProperty(_characterModel, "scale", new Vector3(0.9f, 1.1f, 0.9f), 0.08f);
+        tween.TweenProperty(_characterModel, "scale", Vector3.One, 0.1f);
     }
 }
