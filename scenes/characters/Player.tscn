@@ -1,29 +1,103 @@
-[gd_scene load_steps=5 format=3 uid="uid://player001"]
+[gd_scene load_steps=14 format=3 uid="uid://player001"]
 
 [ext_resource type="Script" path="res://scripts/player/Player.cs" id="1_player"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
-radius = 0.4
-height = 1.8
+radius = 0.35
+height = 1.6
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_1"]
-radius = 0.4
-height = 1.8
+[sub_resource type="StandardMaterial3D" id="BodyMaterial"]
+albedo_color = Color(0.2, 0.85, 0.75, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
-albedo_color = Color(0.2, 0.5, 0.8, 1)
+[sub_resource type="StandardMaterial3D" id="SkinMaterial"]
+albedo_color = Color(1.0, 0.85, 0.72, 1)
+
+[sub_resource type="StandardMaterial3D" id="EyeMaterial"]
+albedo_color = Color(0.1, 0.1, 0.1, 1)
+
+[sub_resource type="StandardMaterial3D" id="ShoeMaterial"]
+albedo_color = Color(0.3, 0.25, 0.2, 1)
+
+[sub_resource type="SphereMesh" id="HeadMesh"]
+radius = 0.32
+height = 0.64
+
+[sub_resource type="BoxMesh" id="BodyMesh"]
+size = Vector3(0.6, 0.55, 0.4)
+
+[sub_resource type="BoxMesh" id="ArmMesh"]
+size = Vector3(0.18, 0.4, 0.18)
+
+[sub_resource type="CylinderMesh" id="LegMesh"]
+top_radius = 0.12
+bottom_radius = 0.14
+height = 0.45
+
+[sub_resource type="BoxMesh" id="FootMesh"]
+size = Vector3(0.18, 0.12, 0.28)
+
+[sub_resource type="SphereMesh" id="EyeMesh"]
+radius = 0.06
+height = 0.12
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_player")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 shape = SubResource("CapsuleShape3D_1")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
-mesh = SubResource("CapsuleMesh_1")
-surface_material_override/0 = SubResource("StandardMaterial3D_1")
+[node name="CharacterModel" type="Node3D" parent="."]
+
+[node name="Body" type="MeshInstance3D" parent="CharacterModel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
+mesh = SubResource("BodyMesh")
+surface_material_override/0 = SubResource("BodyMaterial")
+
+[node name="Head" type="MeshInstance3D" parent="CharacterModel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.42, 0)
+mesh = SubResource("HeadMesh")
+surface_material_override/0 = SubResource("SkinMaterial")
+
+[node name="EyeLeft" type="MeshInstance3D" parent="CharacterModel/Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.12, 0.05, 0.28)
+mesh = SubResource("EyeMesh")
+surface_material_override/0 = SubResource("EyeMaterial")
+
+[node name="EyeRight" type="MeshInstance3D" parent="CharacterModel/Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.05, 0.28)
+mesh = SubResource("EyeMesh")
+surface_material_override/0 = SubResource("EyeMaterial")
+
+[node name="ArmLeft" type="MeshInstance3D" parent="CharacterModel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.39, 0.85, 0)
+mesh = SubResource("ArmMesh")
+surface_material_override/0 = SubResource("BodyMaterial")
+
+[node name="ArmRight" type="MeshInstance3D" parent="CharacterModel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.39, 0.85, 0)
+mesh = SubResource("ArmMesh")
+surface_material_override/0 = SubResource("BodyMaterial")
+
+[node name="LegLeft" type="MeshInstance3D" parent="CharacterModel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 0.35, 0)
+mesh = SubResource("LegMesh")
+surface_material_override/0 = SubResource("BodyMaterial")
+
+[node name="LegRight" type="MeshInstance3D" parent="CharacterModel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0.35, 0)
+mesh = SubResource("LegMesh")
+surface_material_override/0 = SubResource("BodyMaterial")
+
+[node name="FootLeft" type="MeshInstance3D" parent="CharacterModel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 0.06, 0.05)
+mesh = SubResource("FootMesh")
+surface_material_override/0 = SubResource("ShoeMaterial")
+
+[node name="FootRight" type="MeshInstance3D" parent="CharacterModel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0.06, 0.05)
+mesh = SubResource("FootMesh")
+surface_material_override/0 = SubResource("ShoeMaterial")
 
 [node name="CameraArm" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
