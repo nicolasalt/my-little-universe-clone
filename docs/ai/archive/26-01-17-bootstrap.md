@@ -1,39 +1,42 @@
-# 3D RPG Bootstrap Checklist
+---
+title: Project Bootstrap
+status: completed
+modifies: null
+priority: null
+author: null
+created: 26-01-17
+completed: 26-01-17
+---
 
-## Phase 1: Project Structure
+# Project Bootstrap
+
+Initial project setup.
+
+## Summary
+Bootstrap 3D RPG project structure with core systems.
+
+## Implementation Checklist
 - [x] Create folder structure (scenes, scripts, resources, assets)
 - [x] Set up project settings (input mappings, autoloads)
-
-## Phase 2: Core Scene Setup
 - [x] Create main game scene with environment
 - [x] Add lighting (DirectionalLight3D, WorldEnvironment)
 - [x] Add ground/floor mesh
 - [x] Configure camera
-
-## Phase 3: Player System
 - [x] Create Player scene (CharacterBody3D)
 - [x] Implement 3rd person camera with mouse look
 - [x] Add WASD movement with sprint
 - [x] Add jump mechanics
 - [x] Create player stats resource (health, stamina, mana)
-
-## Phase 4: Game Systems
 - [x] Create GameManager autoload singleton
 - [x] Create PlayerStats resource script
 - [x] Set up signal bus for game events
-
-## Phase 5: Basic UI
 - [x] Create HUD scene
 - [x] Add health bar
 - [x] Add stamina bar
 - [x] Add crosshair/interaction prompt
-
-## Phase 6: Integration
 - [x] Connect all scenes in main scene
 - [x] Test player movement and camera
 - [x] Verify UI updates with stats
-
----
 
 ## Files Created
 
@@ -51,18 +54,3 @@
 
 ### Configuration
 - `project.godot` - Updated with input mappings and autoloads
-
----
-
-## How to Run
-
-1. Open the project in Godot 4.5
-2. Build the C# solution (Build > Build Solution or Ctrl+Shift+B)
-3. Press F5 to run the game
-
-## Controls
-- **WASD** - Move
-- **Mouse** - Look around
-- **Space** - Jump
-- **Shift** - Sprint (drains stamina)
-- **Escape** - Pause
