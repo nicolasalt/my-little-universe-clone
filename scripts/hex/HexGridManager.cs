@@ -29,38 +29,48 @@ public partial class HexGridManager : Node3D
             for (int r = -GridRadius; r <= GridRadius; r++)
             {
                 var coords = new Vector2I(q, r);
-                CreateTile(coords);
+                bool isOrigin = coords == Vector2I.Zero;
+                CreateTile(coords, startVisible: isOrigin);
             }
         }
 
-        // Unlock the origin tile
+        // Unlock the origin tile and reveal adjacent hexes
         var originTile = GetTile(Vector2I.Zero);
         if (originTile != null)
         {
             originTile.State = HexState.Unlocked;
             UpdateVisual(Vector2I.Zero);
-            UpdateUnlockableVisuals();
+            RevealAdjacentHexes(Vector2I.Zero);
         }
     }
 
     /// <summary>
-    /// Update visual state of all tiles that can be unlocked.
+    /// Reveal hexes adjacent to a newly unlocked hex with staggered animation.
     /// </summary>
-    private void UpdateUnlockableVisuals()
+    private void RevealAdjacentHexes(Vector2I unlockedCoords)
     {
-        foreach (var (coords, visual) in _visuals)
+        float delay = 0f;
+        const float staggerDelay = 0.05f;
+
+        foreach (var neighbor in HexCoordinates.GetNeighbors(unlockedCoords))
         {
-            bool canUnlock = CanUnlock(coords);
-            visual.SetUnlockable(canUnlock);
-            var tile = GetTile(coords);
-            if (tile != null)
+            var visual = GetVisual(neighbor);
+            var tile = GetTile(neighbor);
+
+            if (visual != null && tile != null && tile.State == HexState.Locked)
             {
-                visual.UpdateState(tile);
+                if (!visual.IsCurrentlyVisible)
+                {
+                    visual.SetUnlockable(true);
+                    visual.UpdateState(tile);
+                    visual.AnimateAppear(delay);
+                    delay += staggerDelay;
+                }
             }
         }
     }
 
-    private void CreateTile(Vector2I coords)
+    private void CreateTile(Vector2I coords, bool startVisible = false)
     {
         // Create tile data
         var tile = new HexTile(coords);
@@ -70,7 +80,7 @@ public partial class HexGridManager : Node3D
 
         // Create visual
         var visual = new HexVisual();
-        visual.Initialize(coords, tile);
+        visual.Initialize(coords, tile, startVisible);
         visual.Position = HexCoordinates.HexToWorld(coords);
         AddChild(visual);
         _visuals[coords] = visual;
@@ -161,7 +171,13 @@ public partial class HexGridManager : Node3D
 
         tile.State = HexState.Unlocked;
         UpdateVisual(coords);
-        UpdateUnlockableVisuals();
+
+        // Play unlock animation
+        var visual = GetVisual(coords);
+        visual?.AnimateUnlock();
+
+        // Reveal adjacent locked hexes
+        RevealAdjacentHexes(coords);
 
         SignalBus.Instance?.EmitSignal(SignalBus.SignalName.HexUnlocked, coords);
     }

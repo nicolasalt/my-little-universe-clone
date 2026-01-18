@@ -127,7 +127,7 @@ int scaledCost = baseCost * (1 + distanceFromStart / 5);
 - [x] Implement fog of war visual (color-based MVP)
 - [x] Create unlock cost UI overlay
 - [x] Implement payment system
-- [ ] Add unlock animation
+- [x] Add unlock animation
 - [x] Implement content spawning on unlock
 - [ ] Create hex editor tool for level design
 - [x] Add adjacency check for unlocking
