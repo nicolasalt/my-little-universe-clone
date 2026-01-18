@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://main001"]
+[gd_scene load_steps=10 format=3 uid="uid://main001"]
 
 [ext_resource type="PackedScene" uid="uid://player001" path="res://scenes/characters/Player.tscn" id="1_player"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://scenes/ui/HUD.tscn" id="2_hud"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scripts/hex/HexGridManager.cs" id="5_hexgrid"]
 [ext_resource type="PackedScene" uid="uid://hexunlockui001" path="res://scenes/hex/HexUnlockUI.tscn" id="6_hexui"]
 [ext_resource type="Script" path="res://scripts/resources/ResourceSpawnManager.cs" id="7_resmgr"]
+[ext_resource type="PackedScene" uid="uid://hexeditor001" path="res://scenes/editor/HexEditor.tscn" id="8_hexeditor"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 sky_top_color = Color(0.4, 0.6, 0.9, 1)
@@ -51,3 +52,5 @@ RockScene = ExtResource("4_rock")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="HUD" parent="." instance=ExtResource("2_hud")]
+
+[node name="HexEditor" parent="." instance=ExtResource("8_hexeditor")]

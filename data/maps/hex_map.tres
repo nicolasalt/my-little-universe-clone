@@ -1,0 +1,471 @@
+[gd_resource type="Resource" script_class="HexMapData" load_steps=75 format=3]
+
+[ext_resource type="Script" path="res://scripts/hex/HexMapData.cs" id="1_hexmapdata"]
+[ext_resource type="Script" path="res://scripts/hex/HexSaveData.cs" id="2_hexsavedata"]
+[ext_resource type="Script" path="res://scripts/resources/ResourceSpawnPoint.cs" id="3_spawnpoint"]
+[ext_resource type="PackedScene" path="res://scenes/resources/Tree.tscn" id="4_tree"]
+[ext_resource type="PackedScene" path="res://scenes/resources/Rock.tscn" id="5_rock"]
+
+[sub_resource type="Resource" id="spawn_0_0_tree1"]
+resource_local_to_scene = true
+script = ExtResource("3_spawnpoint")
+ResourceScene = ExtResource("4_tree")
+LocalOffset = Vector2(3, -3)
+
+[sub_resource type="Resource" id="spawn_0_0_tree2"]
+resource_local_to_scene = true
+script = ExtResource("3_spawnpoint")
+ResourceScene = ExtResource("4_tree")
+LocalOffset = Vector2(-3, -3)
+
+[sub_resource type="Resource" id="spawn_0_0_rock1"]
+resource_local_to_scene = true
+script = ExtResource("3_spawnpoint")
+ResourceScene = ExtResource("5_rock")
+LocalOffset = Vector2(-3, 2)
+
+[sub_resource type="Resource" id="Resource_egagt"]
+resource_local_to_scene = true
+script = ExtResource("3_spawnpoint")
+ResourceScene = ExtResource("5_rock")
+LocalOffset = Vector2(2.8218346, 1.524205)
+
+[sub_resource type="Resource" id="Resource_xx74t"]
+resource_local_to_scene = true
+script = ExtResource("3_spawnpoint")
+ResourceScene = ExtResource("5_rock")
+LocalOffset = Vector2(1.9773407, 2.6570556)
+
+[sub_resource type="Resource" id="hex_0_0"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+InitialState = 1
+Spawns = Array[ExtResource("3_spawnpoint")]([SubResource("spawn_0_0_tree1"), SubResource("spawn_0_0_tree2"), SubResource("spawn_0_0_rock1"), SubResource("Resource_egagt"), SubResource("Resource_xx74t")])
+
+[sub_resource type="Resource" id="spawn_1_0_tree1"]
+resource_local_to_scene = true
+script = ExtResource("3_spawnpoint")
+ResourceScene = ExtResource("4_tree")
+LocalOffset = Vector2(1, 2)
+
+[sub_resource type="Resource" id="spawn_1_0_rock1"]
+resource_local_to_scene = true
+script = ExtResource("3_spawnpoint")
+ResourceScene = ExtResource("5_rock")
+LocalOffset = Vector2(-1, -1)
+
+[sub_resource type="Resource" id="hex_1_0"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(1, 0)
+UnlockCostWood = 10
+Spawns = Array[ExtResource("3_spawnpoint")]([SubResource("spawn_1_0_tree1"), SubResource("spawn_1_0_rock1")])
+
+[sub_resource type="Resource" id="Resource_kg4sg"]
+resource_local_to_scene = true
+script = ExtResource("3_spawnpoint")
+ResourceScene = ExtResource("4_tree")
+LocalOffset = Vector2(2.494852, 0.08800125)
+
+[sub_resource type="Resource" id="Resource_rb1rt"]
+resource_local_to_scene = true
+script = ExtResource("3_spawnpoint")
+ResourceScene = ExtResource("5_rock")
+LocalOffset = Vector2(2.0623074, -1.642174)
+
+[sub_resource type="Resource" id="Resource_2rtk0"]
+resource_local_to_scene = true
+script = ExtResource("3_spawnpoint")
+ResourceScene = ExtResource("5_rock")
+LocalOffset = Vector2(1.691555, -2.6617424)
+
+[sub_resource type="Resource" id="Resource_s24an"]
+resource_local_to_scene = true
+script = ExtResource("3_spawnpoint")
+ResourceScene = ExtResource("5_rock")
+LocalOffset = Vector2(0.36302757, -3.0324934)
+
+[sub_resource type="Resource" id="Resource_reet5"]
+resource_local_to_scene = true
+script = ExtResource("3_spawnpoint")
+ResourceScene = ExtResource("4_tree")
+LocalOffset = Vector2(0.6565399, -1.8584459)
+
+[sub_resource type="Resource" id="Resource_u2oek"]
+resource_local_to_scene = true
+script = ExtResource("3_spawnpoint")
+ResourceScene = ExtResource("4_tree")
+LocalOffset = Vector2(1.1817703, 0.520545)
+
+[sub_resource type="Resource" id="Resource_y04tk"]
+resource_local_to_scene = true
+script = ExtResource("3_spawnpoint")
+ResourceScene = ExtResource("4_tree")
+LocalOffset = Vector2(0.1313076, -1.6730692)
+
+[sub_resource type="Resource" id="Resource_bcrq6"]
+resource_local_to_scene = true
+script = ExtResource("3_spawnpoint")
+ResourceScene = ExtResource("4_tree")
+LocalOffset = Vector2(1.5216274, -0.5299189)
+
+[sub_resource type="Resource" id="Resource_wqn7f"]
+resource_local_to_scene = true
+script = ExtResource("3_spawnpoint")
+ResourceScene = ExtResource("4_tree")
+LocalOffset = Vector2(2.5875378, 0.36606598)
+
+[sub_resource type="Resource" id="Resource_nvlwk"]
+resource_local_to_scene = true
+script = ExtResource("3_spawnpoint")
+ResourceScene = ExtResource("4_tree")
+LocalOffset = Vector2(2.4485073, -2.105613)
+
+[sub_resource type="Resource" id="Resource_egbqy"]
+resource_local_to_scene = true
+script = ExtResource("3_spawnpoint")
+ResourceScene = ExtResource("4_tree")
+LocalOffset = Vector2(1.691555, -2.9707005)
+
+[sub_resource type="Resource" id="hex_m1_0"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(-1, 0)
+UnlockCostWood = 10
+UnlockCostStone = 3
+Spawns = Array[ExtResource("3_spawnpoint")]([SubResource("Resource_kg4sg"), SubResource("Resource_rb1rt"), SubResource("Resource_2rtk0"), SubResource("Resource_s24an"), SubResource("Resource_reet5"), SubResource("Resource_u2oek"), SubResource("Resource_y04tk"), SubResource("Resource_bcrq6"), SubResource("Resource_wqn7f"), SubResource("Resource_nvlwk"), SubResource("Resource_egbqy")])
+
+[sub_resource type="Resource" id="spawn_0_1_rock1"]
+resource_local_to_scene = true
+script = ExtResource("3_spawnpoint")
+ResourceScene = ExtResource("5_rock")
+LocalOffset = Vector2(2, 0)
+
+[sub_resource type="Resource" id="spawn_0_1_rock2"]
+resource_local_to_scene = true
+script = ExtResource("3_spawnpoint")
+ResourceScene = ExtResource("5_rock")
+LocalOffset = Vector2(2.5, 1)
+
+[sub_resource type="Resource" id="hex_0_1"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(0, 1)
+UnlockCostWood = 10
+Spawns = Array[ExtResource("3_spawnpoint")]([SubResource("spawn_0_1_rock1"), SubResource("spawn_0_1_rock2")])
+
+[sub_resource type="Resource" id="hex_0_m1"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(0, -1)
+UnlockCostWood = 10
+
+[sub_resource type="Resource" id="hex_1_m1"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(1, -1)
+UnlockCostWood = 10
+
+[sub_resource type="Resource" id="hex_m1_1"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(-1, 1)
+UnlockCostWood = 10
+
+[sub_resource type="Resource" id="hex_2_0"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(2, 0)
+UnlockCostWood = 15
+UnlockCostStone = 5
+
+[sub_resource type="Resource" id="hex_m2_0"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(-2, 0)
+UnlockCostWood = 15
+UnlockCostStone = 5
+
+[sub_resource type="Resource" id="hex_1_1"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(1, 1)
+UnlockCostWood = 15
+UnlockCostStone = 5
+
+[sub_resource type="Resource" id="hex_m1_m1"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(-1, -1)
+UnlockCostWood = 15
+UnlockCostStone = 5
+
+[sub_resource type="Resource" id="hex_0_2"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(0, 2)
+UnlockCostWood = 15
+UnlockCostStone = 5
+
+[sub_resource type="Resource" id="hex_0_m2"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(0, -2)
+UnlockCostWood = 15
+UnlockCostStone = 5
+
+[sub_resource type="Resource" id="hex_2_m1"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(2, -1)
+UnlockCostWood = 15
+UnlockCostStone = 5
+
+[sub_resource type="Resource" id="hex_m2_1"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(-2, 1)
+UnlockCostWood = 15
+UnlockCostStone = 5
+
+[sub_resource type="Resource" id="hex_1_m2"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(1, -2)
+UnlockCostWood = 15
+UnlockCostStone = 5
+
+[sub_resource type="Resource" id="hex_m1_2"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(-1, 2)
+UnlockCostWood = 15
+UnlockCostStone = 5
+
+[sub_resource type="Resource" id="hex_3_0"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(3, 0)
+UnlockCostWood = 20
+UnlockCostStone = 10
+
+[sub_resource type="Resource" id="hex_m3_0"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(-3, 0)
+UnlockCostWood = 20
+UnlockCostStone = 10
+
+[sub_resource type="Resource" id="hex_2_1"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(2, 1)
+UnlockCostWood = 20
+UnlockCostStone = 10
+
+[sub_resource type="Resource" id="hex_m2_m1"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(-2, -1)
+UnlockCostWood = 20
+UnlockCostStone = 10
+
+[sub_resource type="Resource" id="hex_0_3"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(0, 3)
+UnlockCostWood = 20
+UnlockCostStone = 10
+
+[sub_resource type="Resource" id="hex_0_m3"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(0, -3)
+UnlockCostWood = 20
+UnlockCostStone = 10
+
+[sub_resource type="Resource" id="hex_1_2"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(1, 2)
+UnlockCostWood = 20
+UnlockCostStone = 10
+
+[sub_resource type="Resource" id="hex_m1_m2"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(-1, -2)
+UnlockCostWood = 20
+UnlockCostStone = 10
+
+[sub_resource type="Resource" id="hex_3_m1"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(3, -1)
+UnlockCostWood = 20
+UnlockCostStone = 10
+
+[sub_resource type="Resource" id="hex_m3_1"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(-3, 1)
+UnlockCostWood = 20
+UnlockCostStone = 10
+
+[sub_resource type="Resource" id="hex_2_m2"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(2, -2)
+UnlockCostWood = 20
+UnlockCostStone = 10
+
+[sub_resource type="Resource" id="hex_m2_2"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(-2, 2)
+UnlockCostWood = 20
+UnlockCostStone = 10
+
+[sub_resource type="Resource" id="hex_1_m3"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(1, -3)
+UnlockCostWood = 20
+UnlockCostStone = 10
+
+[sub_resource type="Resource" id="hex_m1_3"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(-1, 3)
+UnlockCostWood = 20
+UnlockCostStone = 10
+
+[sub_resource type="Resource" id="hex_3_1"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(3, 1)
+UnlockCostWood = 25
+UnlockCostStone = 15
+
+[sub_resource type="Resource" id="hex_m3_m1"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(-3, -1)
+UnlockCostWood = 25
+UnlockCostStone = 15
+
+[sub_resource type="Resource" id="hex_2_2"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(2, 2)
+UnlockCostWood = 25
+UnlockCostStone = 15
+
+[sub_resource type="Resource" id="hex_m2_m2"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(-2, -2)
+UnlockCostWood = 25
+UnlockCostStone = 15
+
+[sub_resource type="Resource" id="hex_3_m2"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(3, -2)
+UnlockCostWood = 25
+UnlockCostStone = 15
+
+[sub_resource type="Resource" id="hex_m3_2"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(-3, 2)
+UnlockCostWood = 25
+UnlockCostStone = 15
+
+[sub_resource type="Resource" id="hex_1_3"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(1, 3)
+UnlockCostWood = 25
+UnlockCostStone = 15
+
+[sub_resource type="Resource" id="hex_m1_m3"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(-1, -3)
+UnlockCostWood = 25
+UnlockCostStone = 15
+
+[sub_resource type="Resource" id="hex_2_m3"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(2, -3)
+UnlockCostWood = 25
+UnlockCostStone = 15
+
+[sub_resource type="Resource" id="hex_m2_3"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(-2, 3)
+UnlockCostWood = 25
+UnlockCostStone = 15
+
+[sub_resource type="Resource" id="hex_3_2"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(3, 2)
+UnlockCostWood = 30
+UnlockCostStone = 20
+
+[sub_resource type="Resource" id="hex_m3_m2"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(-3, -2)
+UnlockCostWood = 30
+UnlockCostStone = 20
+
+[sub_resource type="Resource" id="hex_2_3"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(2, 3)
+UnlockCostWood = 30
+UnlockCostStone = 20
+
+[sub_resource type="Resource" id="hex_m2_m3"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(-2, -3)
+UnlockCostWood = 30
+UnlockCostStone = 20
+
+[sub_resource type="Resource" id="hex_3_m3"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(3, -3)
+UnlockCostWood = 30
+UnlockCostStone = 20
+
+[sub_resource type="Resource" id="hex_m3_3"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(-3, 3)
+UnlockCostWood = 30
+UnlockCostStone = 20
+
+[sub_resource type="Resource" id="hex_3_3"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(3, 3)
+UnlockCostWood = 35
+UnlockCostStone = 25
+
+[sub_resource type="Resource" id="hex_m3_m3"]
+resource_local_to_scene = true
+script = ExtResource("2_hexsavedata")
+Coordinates = Vector2i(-3, -3)
+UnlockCostWood = 35
+UnlockCostStone = 25
+
+[resource]
+script = ExtResource("1_hexmapdata")
+Hexes = Array[ExtResource("2_hexsavedata")]([SubResource("hex_0_0"), SubResource("hex_1_0"), SubResource("hex_m1_0"), SubResource("hex_0_1"), SubResource("hex_0_m1"), SubResource("hex_1_m1"), SubResource("hex_m1_1"), SubResource("hex_2_0"), SubResource("hex_m2_0"), SubResource("hex_1_1"), SubResource("hex_m1_m1"), SubResource("hex_0_2"), SubResource("hex_0_m2"), SubResource("hex_2_m1"), SubResource("hex_m2_1"), SubResource("hex_1_m2"), SubResource("hex_m1_2"), SubResource("hex_3_0"), SubResource("hex_m3_0"), SubResource("hex_2_1"), SubResource("hex_m2_m1"), SubResource("hex_0_3"), SubResource("hex_0_m3"), SubResource("hex_1_2"), SubResource("hex_m1_m2"), SubResource("hex_3_m1"), SubResource("hex_m3_1"), SubResource("hex_2_m2"), SubResource("hex_m2_2"), SubResource("hex_1_m3"), SubResource("hex_m1_3"), SubResource("hex_3_1"), SubResource("hex_m3_m1"), SubResource("hex_2_2"), SubResource("hex_m2_m2"), SubResource("hex_3_m2"), SubResource("hex_m3_2"), SubResource("hex_1_3"), SubResource("hex_m1_m3"), SubResource("hex_2_m3"), SubResource("hex_m2_3"), SubResource("hex_3_2"), SubResource("hex_m3_m2"), SubResource("hex_2_3"), SubResource("hex_m2_m3"), SubResource("hex_3_m3"), SubResource("hex_m3_3"), SubResource("hex_3_3"), SubResource("hex_m3_m3")])

@@ -1,5 +1,5 @@
 ---
-status: review
+status: in-progress
 modifies: []
 creates: [systems/hex-editor.md]
 priority: high
@@ -251,30 +251,30 @@ This prevents editor UI from shipping in release builds. The `HexMapData` and `H
 ## Implementation Checklist
 
 ### Phase 1: Data Layer
-- [ ] Create `HexMapData` Resource class
-- [ ] Create `HexSaveData` Resource class with `ToRuntimeTile()` conversion
-- [ ] Update `HexGridManager` with `LoadFromData()` method
-- [ ] Update `HexGridManager._Ready()` to check for map file first
-- [ ] Update `ResourceSpawnManager` to accept spawn data from HexGridManager
+- [x] Create `HexMapData` Resource class
+- [x] Create `HexSaveData` Resource class with `ToRuntimeTile()` conversion
+- [x] Update `HexGridManager` with `LoadFromData()` method
+- [x] Update `HexGridManager._Ready()` to check for map file first
+- [x] Update `ResourceSpawnManager` to accept spawn data from HexGridManager
 
 ### Phase 2: Editor Core
-- [ ] Create `HexEditor` main controller (conditionally compiled)
-- [ ] Implement editor toggle (F1) with game pause via `GetTree().Paused`
-- [ ] Implement hex selection via raycasting
-- [ ] Implement top-down orthographic camera mode (Tab toggle)
+- [x] Create `HexEditor` main controller (conditionally compiled)
+- [x] Implement editor toggle (F1) with game pause via `GetTree().Paused`
+- [x] Implement hex selection via raycasting
+- [x] Implement top-down orthographic camera mode (Tab toggle)
 
 ### Phase 3: Editor UI
-- [ ] Build top bar UI (Save, Load, New Hex, Delete Hex buttons)
-- [ ] Build selected hex panel (coords, state dropdown, cost spinboxes, spawns list)
-- [ ] Build resource palette (Tree, Rock buttons)
+- [x] Build top bar UI (Save, Load, New Hex, Delete Hex buttons)
+- [x] Build selected hex panel (coords, state dropdown, cost spinboxes, spawns list)
+- [x] Build resource palette (Tree, Rock buttons)
 
 ### Phase 4: Editor Interactions
 - [ ] Implement resource placement via raycasting
 - [ ] Implement resource drag repositioning within hex bounds
-- [ ] Implement save to `.tres` file
-- [ ] Implement load from `.tres` file
+- [x] Implement save to `.tres` file
+- [x] Implement load from `.tres` file
 - [ ] Add hex creation mode (click empty space)
-- [ ] Add hex deletion mode with confirmation
+- [x] Add hex deletion mode with confirmation
 
 ### Phase 5: Polish
 - [ ] Add visual feedback for selected hex/resource

@@ -8,6 +8,9 @@ My Little Universe Clone - Development Roadmap
 1. [Resource Gathering](proposals/core/26-01-17-resource-gathering.md) - Auto-gather from nodes (complete)
 2. [Hex Territory](proposals/core/26-01-17-hex-territory.md) - World grid and unlocking (8/10 tasks done)
 
+### Tools
+- [Hex Editor](proposals/26-01-18-hex-editor.md) - Level design tool (Phases 1-3 complete, Phase 4 partial)
+
 ## Up Next
 
 ### Phase 1: Core Loop (P0)

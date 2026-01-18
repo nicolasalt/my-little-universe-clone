@@ -20,19 +20,33 @@ public partial class HexVisual : Node3D
     private Vector2I _coordinates;
     private bool _isUnlockable;
     private bool _isVisible;
+    private bool _startHidden;
     private Tween _currentTween;
+    private Node3D _costDisplay;
+
+    // Icon paths
+    private const string WoodIconPath = "res://assets/icons/wood.svg";
+    private const string StoneIconPath = "res://assets/icons/stone.svg";
 
     public Vector2I Coordinates => _coordinates;
     public bool IsCurrentlyVisible => _isVisible;
 
-    public void Initialize(Vector2I coords, HexTile tile, bool startVisible = false)
+    /// <summary>
+    /// Whether this hex should remain hidden even when adjacent to unlocked hexes.
+    /// Used for secrets or late-game areas.
+    /// </summary>
+    public bool StartHidden => _startHidden;
+
+    public void Initialize(Vector2I coords, HexTile tile, bool startVisible = false, bool startHidden = false)
     {
         _coordinates = coords;
+        _startHidden = startHidden;
         CreateMesh();
         CreateCollision();
 
         // Start hidden unless explicitly visible (e.g., origin tile)
-        if (startVisible)
+        // Also hide if startHidden is true (overrides visibility)
+        if (startVisible && !startHidden)
         {
             _isVisible = true;
             Scale = Vector3.One;
@@ -123,10 +137,11 @@ public partial class HexVisual : Node3D
 
     /// <summary>
     /// Animate the hex appearing (scale from 0 to 1 with bounce).
+    /// Will not appear if StartHidden is true.
     /// </summary>
     public void AnimateAppear(float delay = 0f)
     {
-        if (_isVisible) return;
+        if (_isVisible || _startHidden) return;
 
         _isVisible = true;
         _currentTween?.Kill();
@@ -203,5 +218,111 @@ public partial class HexVisual : Node3D
         {
             _material.EmissionEnabled = false;
         }
+    }
+
+    /// <summary>
+    /// Show or hide the cost display for editor mode.
+    /// </summary>
+    public void ShowCostLabel(bool show)
+    {
+        if (_costDisplay != null)
+        {
+            _costDisplay.Visible = show;
+        }
+    }
+
+    /// <summary>
+    /// Update the cost display with current tile costs using icons.
+    /// </summary>
+    public void UpdateCostLabel(HexTile tile)
+    {
+        // Clear existing display
+        if (_costDisplay != null)
+        {
+            _costDisplay.QueueFree();
+            _costDisplay = null;
+        }
+
+        if (tile == null) return;
+
+        _costDisplay = new Node3D();
+        _costDisplay.Position = new Vector3(0, 0.5f, 0);
+        AddChild(_costDisplay);
+
+        if (tile.State == HexState.Unlocked)
+        {
+            // Show checkmark for unlocked
+            var label = CreateLabel("✓", new Color(0.4f, 0.9f, 0.4f));
+            label.Position = Vector3.Zero;
+            _costDisplay.AddChild(label);
+            return;
+        }
+
+        int wood = tile.GetCost(ResourceType.Wood);
+        int stone = tile.GetCost(ResourceType.Stone);
+
+        if (wood == 0 && stone == 0)
+        {
+            // Free hex
+            var label = CreateLabel("✓", new Color(0.4f, 0.9f, 0.4f));
+            label.Position = Vector3.Zero;
+            _costDisplay.AddChild(label);
+            return;
+        }
+
+        // Calculate layout
+        float spacing = 1.2f;
+        float startX = 0f;
+        int itemCount = (wood > 0 ? 1 : 0) + (stone > 0 ? 1 : 0);
+        if (itemCount == 2) startX = -spacing / 2f;
+
+        float xPos = startX;
+
+        if (wood > 0)
+        {
+            AddCostItem(WoodIconPath, wood, new Vector3(xPos, 0, 0));
+            xPos += spacing;
+        }
+
+        if (stone > 0)
+        {
+            AddCostItem(StoneIconPath, stone, new Vector3(xPos, 0, 0));
+        }
+
+        _costDisplay.Visible = false; // Start hidden, ShowCostLabel will reveal
+    }
+
+    private void AddCostItem(string iconPath, int amount, Vector3 position)
+    {
+        // Create sprite for icon
+        var sprite = new Sprite3D();
+        sprite.Texture = GD.Load<Texture2D>(iconPath);
+        sprite.PixelSize = 0.015f;
+        sprite.Billboard = BaseMaterial3D.BillboardModeEnum.Enabled;
+        sprite.NoDepthTest = true;
+        sprite.Position = position + new Vector3(-0.3f, 0, 0);
+        _costDisplay.AddChild(sprite);
+
+        // Create label for amount
+        var label = CreateLabel(amount.ToString(), new Color(1f, 1f, 1f));
+        label.Position = position + new Vector3(0.3f, 0, 0);
+        _costDisplay.AddChild(label);
+    }
+
+    private Label3D CreateLabel(string text, Color color)
+    {
+        var label = new Label3D();
+        label.Text = text;
+        label.FontSize = 32;
+        label.OutlineSize = 6;
+        label.Modulate = color;
+        label.OutlineModulate = new Color(0f, 0f, 0f);
+        label.Billboard = BaseMaterial3D.BillboardModeEnum.Enabled;
+        label.NoDepthTest = true;
+        label.FixedSize = false;
+        label.PixelSize = 0.015f;
+        label.HorizontalAlignment = HorizontalAlignment.Center;
+        label.VerticalAlignment = VerticalAlignment.Center;
+        return label;
     }
 }

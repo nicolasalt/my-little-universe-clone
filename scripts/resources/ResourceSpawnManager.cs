@@ -26,9 +26,6 @@ public partial class ResourceSpawnManager : Node
     {
         Instance = this;
 
-        // Initialize spawn definitions
-        InitializeSpawnDefinitions();
-
         // Connect to HexUnlocked signal
         if (SignalBus.Instance != null)
         {
@@ -40,8 +37,52 @@ public partial class ResourceSpawnManager : Node
             CallDeferred(nameof(ConnectSignals));
         }
 
+        // Initialize spawn definitions after HexGridManager is ready
+        CallDeferred(nameof(InitializeAfterGridReady));
+    }
+
+    /// <summary>
+    /// Initialize spawn definitions after HexGridManager has loaded.
+    /// Uses data from map file if available, otherwise falls back to procedural definitions.
+    /// </summary>
+    private void InitializeAfterGridReady()
+    {
+        // Check if HexGridManager loaded spawn data from a map file
+        if (HexGridManager.Instance?.HasLoadedSpawnData == true)
+        {
+            LoadSpawnDataFromGrid();
+        }
+        else
+        {
+            // Fall back to procedural definitions
+            InitializeSpawnDefinitions();
+        }
+
         // Spawn resources for origin hex (already unlocked at start)
-        CallDeferred(nameof(SpawnOriginResources));
+        SpawnOriginResources();
+    }
+
+    /// <summary>
+    /// Load spawn definitions from HexGridManager's loaded map data.
+    /// </summary>
+    private void LoadSpawnDataFromGrid()
+    {
+        _spawnDefinitions.Clear();
+
+        foreach (var coords in HexGridManager.Instance.GetHexesWithSpawnData())
+        {
+            var spawnData = HexGridManager.Instance.GetSpawnData(coords);
+            if (spawnData != null && spawnData.Count > 0)
+            {
+                // Convert Array<ResourceSpawnPoint> to HexResourceDefinition
+                var spawnPoints = new ResourceSpawnPoint[spawnData.Count];
+                for (int i = 0; i < spawnData.Count; i++)
+                {
+                    spawnPoints[i] = spawnData[i];
+                }
+                _spawnDefinitions[coords] = new HexResourceDefinition(spawnPoints);
+            }
+        }
     }
 
     /// <summary>

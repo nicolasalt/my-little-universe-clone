@@ -7,17 +7,37 @@ using System.Linq;
 /// </summary>
 public partial class HexGridManager : Node3D
 {
+    private const string MapFilePath = "res://data/maps/hex_map.tres";
+
     [Export] public int GridRadius = 3; // Creates a 7x7 grid (radius 3 from center)
     [Export] public PackedScene HexVisualScene;
 
     private Dictionary<Vector2I, HexTile> _tiles = new();
     private Dictionary<Vector2I, HexVisual> _visuals = new();
 
+    /// <summary>
+    /// Spawn data loaded from map file, keyed by hex coordinates.
+    /// Populated by LoadFromData() for ResourceSpawnManager to consume.
+    /// </summary>
+    private Dictionary<Vector2I, Godot.Collections.Array<ResourceSpawnPoint>> _spawnData = new();
+
     public static HexGridManager Instance { get; private set; }
 
     public override void _Ready()
     {
         Instance = this;
+
+        // Check for map file first, fall back to procedural generation
+        if (ResourceLoader.Exists(MapFilePath))
+        {
+            var mapData = GD.Load<HexMapData>(MapFilePath);
+            if (mapData != null)
+            {
+                LoadFromData(mapData);
+                return;
+            }
+        }
+
         GenerateGrid();
     }
 
@@ -87,6 +107,93 @@ public partial class HexGridManager : Node3D
     }
 
     /// <summary>
+    /// Load hex grid from map data file.
+    /// </summary>
+    public void LoadFromData(HexMapData data)
+    {
+        ClearGrid();
+
+        // Track which hexes start unlocked so we can reveal their neighbors
+        var unlockedHexes = new List<Vector2I>();
+
+        foreach (var hexData in data.Hexes)
+        {
+            var tile = hexData.ToRuntimeTile();
+            bool startVisible = tile.State == HexState.Unlocked && !hexData.StartHidden;
+
+            CreateTileFromData(hexData.Coordinates, tile, hexData.StartHidden, startVisible);
+
+            // Store spawn data for ResourceSpawnManager
+            if (hexData.Spawns != null && hexData.Spawns.Count > 0)
+            {
+                _spawnData[hexData.Coordinates] = hexData.Spawns;
+            }
+
+            if (tile.State == HexState.Unlocked)
+            {
+                unlockedHexes.Add(hexData.Coordinates);
+            }
+        }
+
+        // Reveal hexes adjacent to unlocked hexes
+        foreach (var coords in unlockedHexes)
+        {
+            RevealAdjacentHexes(coords);
+        }
+    }
+
+    /// <summary>
+    /// Create a tile from loaded save data.
+    /// </summary>
+    private void CreateTileFromData(Vector2I coords, HexTile tile, bool startHidden, bool startVisible)
+    {
+        _tiles[coords] = tile;
+
+        // Create visual
+        var visual = new HexVisual();
+        visual.Initialize(coords, tile, startVisible, startHidden);
+        visual.Position = HexCoordinates.HexToWorld(coords);
+        AddChild(visual);
+        _visuals[coords] = visual;
+    }
+
+    /// <summary>
+    /// Clear all tiles and visuals from the grid.
+    /// </summary>
+    public void ClearGrid()
+    {
+        foreach (var visual in _visuals.Values)
+        {
+            visual.QueueFree();
+        }
+        _tiles.Clear();
+        _visuals.Clear();
+        _spawnData.Clear();
+    }
+
+    /// <summary>
+    /// Get spawn data for a hex (for ResourceSpawnManager).
+    /// Returns null if no spawn data exists for the hex.
+    /// </summary>
+    public Godot.Collections.Array<ResourceSpawnPoint> GetSpawnData(Vector2I coords)
+    {
+        return _spawnData.GetValueOrDefault(coords);
+    }
+
+    /// <summary>
+    /// Check if spawn data was loaded from a map file.
+    /// </summary>
+    public bool HasLoadedSpawnData => _spawnData.Count > 0;
+
+    /// <summary>
+    /// Get all hex coordinates that have spawn data defined.
+    /// </summary>
+    public IEnumerable<Vector2I> GetHexesWithSpawnData()
+    {
+        return _spawnData.Keys;
+    }
+
+    /// <summary>
     /// Get tile at coordinates.
     /// </summary>
     public HexTile GetTile(Vector2I coords)
@@ -100,6 +207,18 @@ public partial class HexGridManager : Node3D
     public HexVisual GetVisual(Vector2I coords)
     {
         return _visuals.GetValueOrDefault(coords);
+    }
+
+    /// <summary>
+    /// Get all tile coordinates and their tiles.
+    /// </summary>
+    public IEnumerable<(Vector2I coords, HexTile tile, HexVisual visual)> GetAllHexes()
+    {
+        foreach (var (coords, tile) in _tiles)
+        {
+            _visuals.TryGetValue(coords, out var visual);
+            yield return (coords, tile, visual);
+        }
     }
 
     /// <summary>

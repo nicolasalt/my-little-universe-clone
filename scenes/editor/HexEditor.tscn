@@ -1,0 +1,207 @@
+[gd_scene load_steps=5 format=3 uid="uid://hexeditor001"]
+
+[ext_resource type="Script" path="res://scripts/editor/HexEditor.cs" id="1_hexeditor"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_resource"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pressed"]
+bg_color = Color(0.3, 0.6, 0.3, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.8, 0.4, 1)
+corner_radius_left = 4
+corner_radius_right = 4
+content_margin_left = 10.0
+content_margin_right = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_normal"]
+bg_color = Color(0.2, 0.2, 0.2, 1)
+corner_radius_left = 4
+corner_radius_right = 4
+content_margin_left = 10.0
+content_margin_right = 10.0
+
+[node name="HexEditor" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_hexeditor")
+
+[node name="TopBar" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TopBar"]
+layout_mode = 2
+
+[node name="SaveButton" type="Button" parent="TopBar/HBoxContainer"]
+layout_mode = 2
+text = "Save"
+
+[node name="LoadButton" type="Button" parent="TopBar/HBoxContainer"]
+layout_mode = 2
+text = "Load"
+
+[node name="Separator" type="VSeparator" parent="TopBar/HBoxContainer"]
+layout_mode = 2
+
+[node name="NewHexButton" type="Button" parent="TopBar/HBoxContainer"]
+layout_mode = 2
+text = "New Hex"
+
+[node name="DeleteHexButton" type="Button" parent="TopBar/HBoxContainer"]
+layout_mode = 2
+text = "Delete Hex"
+
+[node name="Spacer" type="Control" parent="TopBar/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="StatusLabel" type="Label" parent="TopBar/HBoxContainer"]
+layout_mode = 2
+text = "HEX EDITOR [F1 to close, Tab for top-down]"
+
+[node name="SelectedHexPanel" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -250.0
+offset_top = -400.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="SelectedHexPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SelectedHexPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="SelectedHexPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Selected Hex"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="SelectedHexPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CoordsLabel" type="Label" parent="SelectedHexPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Coords: (0, 0)"
+
+[node name="StateLabel" type="Label" parent="SelectedHexPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Initial State:"
+
+[node name="StateDropdown" type="OptionButton" parent="SelectedHexPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+item_count = 2
+popup/item_0/text = "Locked"
+popup/item_1/text = "Unlocked"
+
+[node name="HiddenCheck" type="CheckBox" parent="SelectedHexPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Start Hidden"
+
+[node name="HSeparator2" type="HSeparator" parent="SelectedHexPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CostsLabel" type="Label" parent="SelectedHexPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Unlock Costs:"
+
+[node name="WoodCostContainer" type="HBoxContainer" parent="SelectedHexPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="WoodLabel" type="Label" parent="SelectedHexPanel/MarginContainer/VBoxContainer/WoodCostContainer"]
+layout_mode = 2
+text = "Wood:"
+
+[node name="WoodSpinBox" type="SpinBox" parent="SelectedHexPanel/MarginContainer/VBoxContainer/WoodCostContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 999.0
+
+[node name="StoneCostContainer" type="HBoxContainer" parent="SelectedHexPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="StoneLabel" type="Label" parent="SelectedHexPanel/MarginContainer/VBoxContainer/StoneCostContainer"]
+layout_mode = 2
+text = "Stone:"
+
+[node name="StoneSpinBox" type="SpinBox" parent="SelectedHexPanel/MarginContainer/VBoxContainer/StoneCostContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 999.0
+
+[node name="HSeparator3" type="HSeparator" parent="SelectedHexPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SpawnsLabel" type="Label" parent="SelectedHexPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Resource Spawns:"
+
+[node name="SpawnsList" type="ItemList" parent="SelectedHexPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="ResourcePalette" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ResourcePalette"]
+layout_mode = 2
+alignment = 1
+
+[node name="PaletteLabel" type="Label" parent="ResourcePalette/HBoxContainer"]
+layout_mode = 2
+text = "Place Resource:"
+
+[node name="NoneButton" type="Button" parent="ResourcePalette/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
+toggle_mode = true
+button_pressed = true
+button_group = SubResource("ButtonGroup_resource")
+text = "None"
+
+[node name="TreeButton" type="Button" parent="ResourcePalette/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_resource")
+text = "Tree"
+
+[node name="RockButton" type="Button" parent="ResourcePalette/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_resource")
+text = "Rock"
