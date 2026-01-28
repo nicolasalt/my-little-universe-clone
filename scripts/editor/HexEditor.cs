@@ -808,28 +808,71 @@ public partial class HexEditor : Control
 
     private void OnStateChanged(long index)
     {
-        if (_isUpdatingUI || _selectedHex == null) return;
+        if (_isUpdatingUI || _selectedHex == null || !_selectedCoords.HasValue) return;
         _selectedHex.InitialState = (HexInitialState)index;
+
+        // Sync to runtime tile
+        var tile = HexGridManager.Instance?.GetTile(_selectedCoords.Value);
+        if (tile != null)
+        {
+            tile.State = index == (int)HexInitialState.Unlocked ? HexState.Unlocked : HexState.Locked;
+        }
         GD.Print($"[HexEditor] State changed to {_selectedHex.InitialState}");
     }
 
     private void OnHiddenToggled(bool pressed)
     {
-        if (_isUpdatingUI || _selectedHex == null) return;
+        if (_isUpdatingUI || _selectedHex == null || !_selectedCoords.HasValue) return;
         _selectedHex.StartHidden = pressed;
+
+        // Sync to runtime visual
+        var visual = HexGridManager.Instance?.GetVisual(_selectedCoords.Value);
+        if (visual != null)
+        {
+            visual.StartHidden = pressed;
+        }
         GD.Print($"[HexEditor] StartHidden changed to {pressed}");
     }
 
     private void OnWoodCostChanged(double value)
     {
-        if (_isUpdatingUI || _selectedHex == null) return;
+        if (_isUpdatingUI || _selectedHex == null || !_selectedCoords.HasValue) return;
         _selectedHex.UnlockCostWood = (int)value;
+        SyncCostToRuntime();
     }
 
     private void OnStoneCostChanged(double value)
     {
-        if (_isUpdatingUI || _selectedHex == null) return;
+        if (_isUpdatingUI || _selectedHex == null || !_selectedCoords.HasValue) return;
         _selectedHex.UnlockCostStone = (int)value;
+        SyncCostToRuntime();
+    }
+
+    /// <summary>
+    /// Sync unlock costs from editor save data to the runtime tile and update visual.
+    /// </summary>
+    private void SyncCostToRuntime()
+    {
+        if (!_selectedCoords.HasValue) return;
+        var coords = _selectedCoords.Value;
+
+        var tile = HexGridManager.Instance?.GetTile(coords);
+        if (tile != null)
+        {
+            tile.UnlockCost.Clear();
+            if (_selectedHex.UnlockCostWood > 0)
+                tile.UnlockCost[ResourceType.Wood] = _selectedHex.UnlockCostWood;
+            if (_selectedHex.UnlockCostStone > 0)
+                tile.UnlockCost[ResourceType.Stone] = _selectedHex.UnlockCostStone;
+
+            // Update cost label visual
+            var visual = HexGridManager.Instance?.GetVisual(coords);
+            if (visual != null)
+            {
+                visual.UpdateCostLabel(tile);
+                visual.ShowCostLabel(true);
+            }
+        }
     }
 
     private void OnResourceSelected(string resourceType)
@@ -889,17 +932,33 @@ public partial class HexEditor : Control
     {
         if (_selectedCoords.HasValue && _selectedHex != null)
         {
-            // Remove from lookup and array
-            _hexLookup.Remove(_selectedCoords.Value);
+            var coords = _selectedCoords.Value;
+
+            // Remove preview resources for this hex
+            if (_placedResources.TryGetValue(coords, out var resourceList))
+            {
+                foreach (var node in resourceList)
+                {
+                    node?.QueueFree();
+                }
+                _placedResources.Remove(coords);
+            }
+
+            // Remove from map data
+            _hexLookup.Remove(coords);
             for (int i = _mapData.Hexes.Count - 1; i >= 0; i--)
             {
-                if (_mapData.Hexes[i].Coordinates == _selectedCoords.Value)
+                if (_mapData.Hexes[i].Coordinates == coords)
                 {
                     _mapData.Hexes.RemoveAt(i);
                     break;
                 }
             }
-            GD.Print($"[HexEditor] Deleted hex {_selectedCoords.Value}");
+
+            // Remove from runtime grid
+            HexGridManager.Instance?.RemoveTile(coords);
+
+            GD.Print($"[HexEditor] Deleted hex {coords}");
             DeselectHex();
         }
     }
@@ -1103,6 +1162,8 @@ public partial class HexEditor : Control
         if (HexGridManager.Instance?.GetTile(coords) != null)
         {
             GD.Print($"[HexEditor] Hex {coords} already exists");
+            SelectHex(coords);
+            ExitNewHexMode();
             return;
         }
 
@@ -1113,12 +1174,23 @@ public partial class HexEditor : Control
         _hexLookup[coords] = hexData;
         _mapData.Hexes.Add(hexData);
 
-        // Create visual in grid manager (need to expose this or work around)
-        // For now, just add to map data - will appear after save/reload
-        GD.Print($"[HexEditor] Created new hex at {coords} (save and reload to see it)");
-        _statusLabel.Text = $"Created hex {coords} - Save to apply";
+        // Create runtime tile and visual immediately
+        var tile = hexData.ToRuntimeTile();
+        HexGridManager.Instance.AddTile(coords, tile, startVisible: true);
+
+        // Show cost label on the new hex
+        var visual = HexGridManager.Instance.GetVisual(coords);
+        if (visual != null)
+        {
+            visual.UpdateCostLabel(tile);
+            visual.ShowCostLabel(true);
+        }
+
+        GD.Print($"[HexEditor] Created new hex at {coords}");
+        _statusLabel.Text = $"Created hex {coords}";
 
         ExitNewHexMode();
+        SelectHex(coords);
     }
 
     /// <summary>

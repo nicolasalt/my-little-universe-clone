@@ -158,6 +158,29 @@ public partial class HexGridManager : Node3D
     }
 
     /// <summary>
+    /// Add a single hex tile at runtime. Used by the editor.
+    /// </summary>
+    public void AddTile(Vector2I coords, HexTile tile, bool startVisible = true)
+    {
+        if (_tiles.ContainsKey(coords)) return;
+        CreateTileFromData(coords, tile, false, startVisible);
+    }
+
+    /// <summary>
+    /// Remove a single hex tile at runtime. Used by the editor.
+    /// </summary>
+    public void RemoveTile(Vector2I coords)
+    {
+        if (_visuals.TryGetValue(coords, out var visual))
+        {
+            visual.QueueFree();
+            _visuals.Remove(coords);
+        }
+        _tiles.Remove(coords);
+        _spawnData.Remove(coords);
+    }
+
+    /// <summary>
     /// Clear all tiles and visuals from the grid.
     /// </summary>
     public void ClearGrid()

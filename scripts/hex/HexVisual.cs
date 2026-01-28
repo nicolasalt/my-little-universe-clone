@@ -35,7 +35,7 @@ public partial class HexVisual : Node3D
     /// Whether this hex should remain hidden even when adjacent to unlocked hexes.
     /// Used for secrets or late-game areas.
     /// </summary>
-    public bool StartHidden => _startHidden;
+    public bool StartHidden { get => _startHidden; set => _startHidden = value; }
 
     public void Initialize(Vector2I coords, HexTile tile, bool startVisible = false, bool startHidden = false)
     {
