@@ -62,6 +62,10 @@ docs/ai/
 - One behavior/mechanic per system doc
 - If a doc exceeds ~200 lines, split it
 
+### Build Verification
+- Always run `dotnet build` after making code changes to verify compilation
+- Fix any errors before moving on to the next task
+
 ### Git Policy
 - All planning docs (`docs/ai/`) should be committed to the repository
 - Commit doc updates alongside code changes when implementing features
