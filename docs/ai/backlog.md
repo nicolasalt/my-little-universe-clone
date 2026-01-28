@@ -9,7 +9,7 @@ My Little Universe Clone - Development Roadmap
 2. [Hex Territory](proposals/core/26-01-17-hex-territory.md) - World grid and unlocking (8/10 tasks done)
 
 ### Tools
-- [Hex Editor](proposals/26-01-18-hex-editor.md) - Level design tool (Phases 1-3 complete, Phase 4 partial)
+- [Hex Editor](proposals/26-01-18-hex-editor.md) - Level design tool (Complete)
 
 ## Up Next
 

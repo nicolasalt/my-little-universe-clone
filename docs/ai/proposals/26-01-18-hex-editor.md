@@ -1,5 +1,5 @@
 ---
-status: in-progress
+status: merged
 modifies: []
 creates: [systems/hex-editor.md]
 priority: high
@@ -269,17 +269,17 @@ This prevents editor UI from shipping in release builds. The `HexMapData` and `H
 - [x] Build resource palette (Tree, Rock buttons)
 
 ### Phase 4: Editor Interactions
-- [ ] Implement resource placement via raycasting
-- [ ] Implement resource drag repositioning within hex bounds
+- [x] Implement resource placement via raycasting
+- [x] Implement resource repositioning (select spawn, click to move)
 - [x] Implement save to `.tres` file
 - [x] Implement load from `.tres` file
-- [ ] Add hex creation mode (click empty space)
-- [x] Add hex deletion mode with confirmation
+- [x] Add hex creation mode (click empty space)
+- [x] Add hex deletion mode
 
 ### Phase 5: Polish
-- [ ] Add visual feedback for selected hex/resource
-- [ ] Add hover preview when placing resources
-- [ ] Add StartHidden support in HexVisual
+- [x] Add visual feedback for selected hex (selection indicator)
+- [x] Add hover preview when placing resources
+- [x] Add StartHidden support in HexVisual
 
 ## Future Enhancements
 

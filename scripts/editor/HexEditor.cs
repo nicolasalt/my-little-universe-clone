@@ -62,6 +62,13 @@ public partial class HexEditor : Control
     private bool _isClearingResourceSelection;
     private Dictionary<Vector2I, System.Collections.Generic.List<Node3D>> _placedResources = new();
 
+    // Editor modes
+    private bool _isNewHexMode;
+    private int _selectedSpawnIndex = -1;
+
+    // Hover preview
+    private Node3D _placementPreview;
+
     public bool IsActive => _isActive;
     public HexSaveData SelectedHex => _selectedHex;
     public Vector2I? SelectedCoords => _selectedCoords;
@@ -107,6 +114,7 @@ public partial class HexEditor : Control
         _hiddenCheck.Toggled += OnHiddenToggled;
         _woodSpinBox.ValueChanged += OnWoodCostChanged;
         _stoneSpinBox.ValueChanged += OnStoneCostChanged;
+        _spawnsList.ItemSelected += OnSpawnSelected;
 
         // Resource palette
         _noneButton = GetNode<Button>("ResourcePalette/HBoxContainer/NoneButton");
@@ -145,7 +153,11 @@ public partial class HexEditor : Control
         // Escape deselects hex and clears resource placement
         if (@event.IsActionPressed("ui_cancel"))
         {
-            if (_selectedResourceScene != null)
+            if (_isNewHexMode)
+            {
+                ExitNewHexMode();
+            }
+            else if (_selectedResourceScene != null)
             {
                 ClearResourceSelection();
             }
@@ -153,6 +165,14 @@ public partial class HexEditor : Control
             {
                 DeselectHex();
             }
+            GetViewport().SetInputAsHandled();
+            return;
+        }
+
+        // Delete key removes selected spawn
+        if (@event is InputEventKey keyEvent && keyEvent.Pressed && keyEvent.Keycode == Key.Delete)
+        {
+            DeleteSelectedSpawn();
             GetViewport().SetInputAsHandled();
             return;
         }
@@ -180,6 +200,12 @@ public partial class HexEditor : Control
                 _cameraZoom = Mathf.Min(MaxZoom, _cameraZoom + ZoomSpeed);
                 UpdateEditorCamera();
             }
+        }
+
+        // Mouse motion for placement preview
+        if (@event is InputEventMouseMotion mouseMotion && _selectedResourceScene != null)
+        {
+            UpdatePlacementPreview(mouseMotion.Position);
         }
     }
 
@@ -258,9 +284,11 @@ public partial class HexEditor : Control
             // Clear preview resources
             ClearAllPreviewResources();
 
-            // Clear selections
+            // Clear selections and modes
             ClearResourceSelection();
             DeselectHex();
+            if (_isNewHexMode) ExitNewHexMode();
+
             GD.Print("[HexEditor] Deactivated");
         }
     }
@@ -539,10 +567,22 @@ public partial class HexEditor : Control
             var hitPos = (Vector3)result["position"];
             var hexCoords = HexCoordinates.WorldToHex(hitPos);
 
+            // New hex mode - create hex at click position
+            if (_isNewHexMode)
+            {
+                CreateNewHex(hexCoords);
+                return;
+            }
+
             // If a resource is selected for placement, place it
             if (_selectedResourceScene != null)
             {
                 PlaceResource(hexCoords, hitPos);
+            }
+            // If a spawn is selected and clicking in same hex, reposition it
+            else if (_selectedSpawnIndex >= 0 && _selectedCoords == hexCoords)
+            {
+                RepositionSelectedSpawn(hitPos);
             }
             else
             {
@@ -551,6 +591,23 @@ public partial class HexEditor : Control
         }
         else
         {
+            // Click on empty space
+            if (_isNewHexMode)
+            {
+                // In new hex mode, try to create hex at approximate position
+                // This requires estimating hex coords from the click - use ground plane intersection
+                var groundY = 0f;
+                var rayDir = camera.ProjectRayNormal(screenPos);
+                var rayOrigin = camera.ProjectRayOrigin(screenPos);
+                if (Mathf.Abs(rayDir.Y) > 0.001f)
+                {
+                    var t = (groundY - rayOrigin.Y) / rayDir.Y;
+                    var groundPos = rayOrigin + rayDir * t;
+                    var hexCoords = HexCoordinates.WorldToHex(groundPos);
+                    CreateNewHex(hexCoords);
+                }
+                return;
+            }
             DeselectHex();
         }
     }
@@ -623,6 +680,7 @@ public partial class HexEditor : Control
     private void SelectHex(Vector2I coords)
     {
         _selectedCoords = coords;
+        _selectedSpawnIndex = -1; // Reset spawn selection
 
         // Look up hex data
         if (_hexLookup.TryGetValue(coords, out var hexData))
@@ -803,6 +861,9 @@ public partial class HexEditor : Control
     {
         _selectedResourceScene = null;
 
+        // Destroy placement preview
+        DestroyPlacementPreview();
+
         // Select None button (ButtonGroup handles deselecting others)
         _isClearingResourceSelection = true;
         _noneButton.ButtonPressed = true;
@@ -821,9 +882,7 @@ public partial class HexEditor : Control
 
     private void OnNewHexPressed()
     {
-        _statusLabel.Text = "NEW HEX MODE: Click empty space to add hex";
-        // TODO: Implement new hex creation mode
-        GD.Print("[HexEditor] New hex mode - not yet implemented");
+        EnterNewHexMode();
     }
 
     private void OnDeleteHexPressed()
@@ -940,6 +999,212 @@ public partial class HexEditor : Control
         }
 
         GD.Print($"[HexEditor] Grid has {totalFromGrid} hexes, added {addedCount} new, total in map: {_mapData.Hexes.Count}");
+    }
+
+    /// <summary>
+    /// Handle spawn selection from the list.
+    /// </summary>
+    private void OnSpawnSelected(long index)
+    {
+        _selectedSpawnIndex = (int)index;
+        _statusLabel.Text = $"Spawn selected - Click in hex to reposition, Delete to remove";
+        GD.Print($"[HexEditor] Selected spawn index {_selectedSpawnIndex}");
+    }
+
+    /// <summary>
+    /// Reposition the selected spawn to a new position within the hex.
+    /// </summary>
+    private void RepositionSelectedSpawn(Vector3 worldPos)
+    {
+        if (_selectedHex == null || _selectedSpawnIndex < 0) return;
+        if (_selectedHex.Spawns == null || _selectedSpawnIndex >= _selectedHex.Spawns.Count) return;
+        if (!_selectedCoords.HasValue) return;
+
+        var coords = _selectedCoords.Value;
+        var hexCenter = HexCoordinates.HexToWorld(coords);
+        var newOffset = new Vector2(worldPos.X - hexCenter.X, worldPos.Z - hexCenter.Z);
+
+        // Update spawn data
+        var spawn = _selectedHex.Spawns[_selectedSpawnIndex];
+        spawn.LocalOffset = newOffset;
+
+        // Update preview node position
+        if (_placedResources.TryGetValue(coords, out var resourceList) && _selectedSpawnIndex < resourceList.Count)
+        {
+            var node = resourceList[_selectedSpawnIndex];
+            if (node != null)
+            {
+                node.Position = worldPos;
+            }
+        }
+
+        GD.Print($"[HexEditor] Repositioned spawn to ({newOffset.X:F1}, {newOffset.Y:F1})");
+        _statusLabel.Text = $"Spawn moved to ({newOffset.X:F1}, {newOffset.Y:F1})";
+
+        // Update UI
+        UpdateHexPanel();
+    }
+
+    /// <summary>
+    /// Delete the currently selected spawn from the hex.
+    /// </summary>
+    private void DeleteSelectedSpawn()
+    {
+        if (_selectedHex == null || _selectedSpawnIndex < 0) return;
+        if (_selectedHex.Spawns == null || _selectedSpawnIndex >= _selectedHex.Spawns.Count) return;
+
+        var coords = _selectedCoords.Value;
+
+        // Remove the preview node
+        if (_placedResources.TryGetValue(coords, out var resourceList) && _selectedSpawnIndex < resourceList.Count)
+        {
+            var node = resourceList[_selectedSpawnIndex];
+            node?.QueueFree();
+            resourceList.RemoveAt(_selectedSpawnIndex);
+        }
+
+        // Remove from spawn data
+        _selectedHex.Spawns.RemoveAt(_selectedSpawnIndex);
+        _selectedSpawnIndex = -1;
+
+        GD.Print($"[HexEditor] Deleted spawn from hex {coords}");
+
+        // Update UI
+        UpdateHexPanel();
+    }
+
+    /// <summary>
+    /// Enter new hex creation mode.
+    /// </summary>
+    private void EnterNewHexMode()
+    {
+        _isNewHexMode = true;
+        ClearResourceSelection();
+        _statusLabel.Text = "NEW HEX MODE: Click to add hex (Esc to cancel)";
+        GD.Print("[HexEditor] Entered new hex mode");
+    }
+
+    /// <summary>
+    /// Exit new hex creation mode.
+    /// </summary>
+    private void ExitNewHexMode()
+    {
+        _isNewHexMode = false;
+        _statusLabel.Text = "HEX EDITOR [F1 to close, Tab for top-down]";
+        GD.Print("[HexEditor] Exited new hex mode");
+    }
+
+    /// <summary>
+    /// Create a new hex at the specified coordinates.
+    /// </summary>
+    private void CreateNewHex(Vector2I coords)
+    {
+        // Check if hex already exists
+        if (HexGridManager.Instance?.GetTile(coords) != null)
+        {
+            GD.Print($"[HexEditor] Hex {coords} already exists");
+            return;
+        }
+
+        // Create hex data
+        var hexData = new HexSaveData(coords);
+        hexData.ResourceLocalToScene = true;
+        hexData.Spawns = new Godot.Collections.Array<ResourceSpawnPoint>();
+        _hexLookup[coords] = hexData;
+        _mapData.Hexes.Add(hexData);
+
+        // Create visual in grid manager (need to expose this or work around)
+        // For now, just add to map data - will appear after save/reload
+        GD.Print($"[HexEditor] Created new hex at {coords} (save and reload to see it)");
+        _statusLabel.Text = $"Created hex {coords} - Save to apply";
+
+        ExitNewHexMode();
+    }
+
+    /// <summary>
+    /// Update the placement preview position.
+    /// </summary>
+    private void UpdatePlacementPreview(Vector2 screenPos)
+    {
+        if (_selectedResourceScene == null)
+        {
+            DestroyPlacementPreview();
+            return;
+        }
+
+        var camera = _isTopDownCamera ? _editorCamera : _gameCamera;
+        if (camera == null) return;
+
+        // Raycast to find position
+        var from = camera.ProjectRayOrigin(screenPos);
+        var to = from + camera.ProjectRayNormal(screenPos) * 1000f;
+
+        var spaceState = camera.GetWorld3D().DirectSpaceState;
+        var query = PhysicsRayQueryParameters3D.Create(from, to);
+        var result = spaceState.IntersectRay(query);
+
+        if (result.Count > 0)
+        {
+            var hitPos = (Vector3)result["position"];
+
+            // Create preview if needed
+            if (_placementPreview == null)
+            {
+                _placementPreview = _selectedResourceScene.Instantiate<Node3D>();
+                _placementPreview.Name = "PlacementPreview";
+                GetTree().CurrentScene.AddChild(_placementPreview);
+
+                // Make it semi-transparent
+                SetPreviewTransparency(_placementPreview, 0.5f);
+            }
+
+            _placementPreview.Position = hitPos;
+            _placementPreview.Visible = true;
+        }
+        else
+        {
+            if (_placementPreview != null)
+            {
+                _placementPreview.Visible = false;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Set transparency on a node and its children.
+    /// </summary>
+    private void SetPreviewTransparency(Node3D node, float alpha)
+    {
+        foreach (var child in node.GetChildren())
+        {
+            if (child is MeshInstance3D meshInstance)
+            {
+                var material = meshInstance.GetActiveMaterial(0);
+                if (material is StandardMaterial3D stdMat)
+                {
+                    var newMat = (StandardMaterial3D)stdMat.Duplicate();
+                    newMat.Transparency = BaseMaterial3D.TransparencyEnum.Alpha;
+                    newMat.AlbedoColor = new Color(newMat.AlbedoColor.R, newMat.AlbedoColor.G, newMat.AlbedoColor.B, alpha);
+                    meshInstance.MaterialOverride = newMat;
+                }
+            }
+            if (child is Node3D child3D)
+            {
+                SetPreviewTransparency(child3D, alpha);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Destroy the placement preview.
+    /// </summary>
+    private void DestroyPlacementPreview()
+    {
+        if (_placementPreview != null)
+        {
+            _placementPreview.QueueFree();
+            _placementPreview = null;
+        }
     }
 
     // Signals
