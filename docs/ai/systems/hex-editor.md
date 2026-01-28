@@ -107,6 +107,13 @@ classes (HexMapData, HexSaveData) are always included since they're needed for l
 
 ## Changelog
 
+### 2026-01-28
+
+- Fix: Editor property changes (state, hidden, costs) now sync to runtime immediately
+- Fix: Cost labels no longer disappear when editing unlock costs
+- Fix: Hex creation/deletion operates on live grid (no save/reload needed)
+- Added `AddTile`/`RemoveTile` public methods to HexGridManager for runtime manipulation
+
 ### 2026-01-18
 
 - Initial implementation
