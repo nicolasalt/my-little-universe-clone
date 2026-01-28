@@ -4,12 +4,16 @@ My Little Universe Clone - Development Roadmap
 
 ## In Progress
 
+(none)
+
+## Completed
+
 ### Phase 1: Core Loop (P0)
-1. [Resource Gathering](proposals/core/26-01-17-resource-gathering.md) - Auto-gather from nodes (complete)
-2. [Hex Territory](proposals/core/26-01-17-hex-territory.md) - World grid and unlocking (8/10 tasks done)
+1. [Resource Gathering](proposals/core/26-01-17-resource-gathering.md) - Auto-gather from nodes
+2. [Hex Territory](proposals/core/26-01-17-hex-territory.md) - World grid and unlocking
 
 ### Tools
-- [Hex Editor](proposals/26-01-18-hex-editor.md) - Level design tool (Complete)
+- [Hex Editor](proposals/26-01-18-hex-editor.md) - Level design tool
 
 ## Up Next
 
@@ -26,7 +30,7 @@ My Little Universe Clone - Development Roadmap
 - [Portal System](proposals/progression/26-01-17-portal-system.md) - World travel
 - [Experience System](proposals/progression/26-01-17-experience-system.md) - XP and leveling
 - [Booster Cards](proposals/progression/26-01-17-booster-cards.md) - Buff card system
-- [Save System](proposals/polish/26-01-17-save-system.md) - Persistence (moved up for MVP)
+- [Save System](proposals/polish/26-01-17-save-system.md) - Persistence (moved up for MVP; includes hex state save/load)
 
 ## Draft
 

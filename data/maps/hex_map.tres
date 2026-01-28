@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="HexMapData" load_steps=75 format=3]
+[gd_resource type="Resource" script_class="HexMapData" load_steps=74 format=3]
 
 [ext_resource type="Script" path="res://scripts/hex/HexMapData.cs" id="1_hexmapdata"]
 [ext_resource type="Script" path="res://scripts/hex/HexSaveData.cs" id="2_hexsavedata"]
@@ -176,13 +176,6 @@ UnlockCostWood = 10
 resource_local_to_scene = true
 script = ExtResource("2_hexsavedata")
 Coordinates = Vector2i(2, 0)
-UnlockCostWood = 15
-UnlockCostStone = 5
-
-[sub_resource type="Resource" id="hex_m2_0"]
-resource_local_to_scene = true
-script = ExtResource("2_hexsavedata")
-Coordinates = Vector2i(-2, 0)
 UnlockCostWood = 15
 UnlockCostStone = 5
 
@@ -468,4 +461,4 @@ UnlockCostStone = 25
 
 [resource]
 script = ExtResource("1_hexmapdata")
-Hexes = Array[ExtResource("2_hexsavedata")]([SubResource("hex_0_0"), SubResource("hex_1_0"), SubResource("hex_m1_0"), SubResource("hex_0_1"), SubResource("hex_0_m1"), SubResource("hex_1_m1"), SubResource("hex_m1_1"), SubResource("hex_2_0"), SubResource("hex_m2_0"), SubResource("hex_1_1"), SubResource("hex_m1_m1"), SubResource("hex_0_2"), SubResource("hex_0_m2"), SubResource("hex_2_m1"), SubResource("hex_m2_1"), SubResource("hex_1_m2"), SubResource("hex_m1_2"), SubResource("hex_3_0"), SubResource("hex_m3_0"), SubResource("hex_2_1"), SubResource("hex_m2_m1"), SubResource("hex_0_3"), SubResource("hex_0_m3"), SubResource("hex_1_2"), SubResource("hex_m1_m2"), SubResource("hex_3_m1"), SubResource("hex_m3_1"), SubResource("hex_2_m2"), SubResource("hex_m2_2"), SubResource("hex_1_m3"), SubResource("hex_m1_3"), SubResource("hex_3_1"), SubResource("hex_m3_m1"), SubResource("hex_2_2"), SubResource("hex_m2_m2"), SubResource("hex_3_m2"), SubResource("hex_m3_2"), SubResource("hex_1_3"), SubResource("hex_m1_m3"), SubResource("hex_2_m3"), SubResource("hex_m2_3"), SubResource("hex_3_2"), SubResource("hex_m3_m2"), SubResource("hex_2_3"), SubResource("hex_m2_m3"), SubResource("hex_3_m3"), SubResource("hex_m3_3"), SubResource("hex_3_3"), SubResource("hex_m3_m3")])
+Hexes = Array[ExtResource("2_hexsavedata")]([SubResource("hex_0_0"), SubResource("hex_1_0"), SubResource("hex_m1_0"), SubResource("hex_0_1"), SubResource("hex_0_m1"), SubResource("hex_1_m1"), SubResource("hex_m1_1"), SubResource("hex_2_0"), SubResource("hex_1_1"), SubResource("hex_m1_m1"), SubResource("hex_0_2"), SubResource("hex_0_m2"), SubResource("hex_2_m1"), SubResource("hex_m2_1"), SubResource("hex_1_m2"), SubResource("hex_m1_2"), SubResource("hex_3_0"), SubResource("hex_m3_0"), SubResource("hex_2_1"), SubResource("hex_m2_m1"), SubResource("hex_0_3"), SubResource("hex_0_m3"), SubResource("hex_1_2"), SubResource("hex_m1_m2"), SubResource("hex_3_m1"), SubResource("hex_m3_1"), SubResource("hex_2_m2"), SubResource("hex_m2_2"), SubResource("hex_1_m3"), SubResource("hex_m1_3"), SubResource("hex_3_1"), SubResource("hex_m3_m1"), SubResource("hex_2_2"), SubResource("hex_m2_m2"), SubResource("hex_3_m2"), SubResource("hex_m3_2"), SubResource("hex_1_3"), SubResource("hex_m1_m3"), SubResource("hex_2_m3"), SubResource("hex_m2_3"), SubResource("hex_3_2"), SubResource("hex_m3_m2"), SubResource("hex_2_3"), SubResource("hex_m2_m3"), SubResource("hex_3_m3"), SubResource("hex_m3_3"), SubResource("hex_3_3"), SubResource("hex_m3_m3")])

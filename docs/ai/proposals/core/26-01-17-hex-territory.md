@@ -1,6 +1,6 @@
 ---
 title: Hex Territory System
-status: in-progress
+status: merged
 modifies: systems/territory/hex-grid.md
 priority: P0
 author: AI
@@ -129,6 +129,6 @@ int scaledCost = baseCost * (1 + distanceFromStart / 5);
 - [x] Implement payment system
 - [x] Add unlock animation
 - [x] Implement content spawning on unlock
-- [ ] Create hex editor tool for level design
+- [x] Create hex editor tool for level design
 - [x] Add adjacency check for unlocking
-- [ ] Save/load hex state
+- [ ] Save/load hex state → Deferred to Phase 2 (Save System)
